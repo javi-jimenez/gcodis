@@ -46,7 +46,7 @@ Requirements
 ----
 
 The project requires:
-- Debian GNU/Linux (tested on unstable) or OpenWrt.
+- Debian GNU/Linux (tested on unstable) or OpenWrt. Perhaps Ubuntu or Debian derivatives.
 - OpenWrt requires the trunk sources. For LXC and debootstrap.
 - Security: sources from Github need SSL and validate the Github certificate. TODO: http://wiki.openwrt.org/doc/howto/wget-ssl-certs . We use *--no-check-certificate* for wget, Github redirects to HTTPS.
 - root permissions. Mainly to install packages and do chroot. If you have installed the requirements could be possible to generate
@@ -55,6 +55,7 @@ The project requires:
 - *perl* for debootstrap *pkgdetails*.
 - *debootstrap*, which can be installed previously. If the program isn't installable directly the install scripts download a version from Debian (ARCH=all) and install it system-wide.
 - *sha1sum* for debootstrap if installed from outside the system (the system is different to Debian or OpenWrt).
+- If you generate LXC containers AND ONLY IF you plan to run the container you need the LXC utilities. The script to run the container is *lxc-start* usually in the *lxc* package in Debian or *lxc-start* package in OpenWrt.
 
 Build Guifi-Community-Distro
 ----
