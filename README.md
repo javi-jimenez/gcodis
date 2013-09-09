@@ -92,7 +92,7 @@ You can share the commands in the next section to automatically build the deboot
 Deploy debootstrap to a LXC container
 ----
 
-After generating the debootstrap, the script automates the process and convert (copies) it to LXC and run the LXC container. The created chroot with debootstrap is untouched and can be reused to deploy into other environments or into LXC again.
+After generating the debootstrap, and if run with the default no parameters, the script automates the process and convert (copies) it to LXC and run the LXC container. The created chroot with debootstrap is untouched and can be reused to deploy into other environments or into LXC again.
 
 From scratch
 ----
@@ -179,7 +179,7 @@ TODO
   - Request: Participants in the Community Cloud project or Community integrate their software.
   - Write proposal for the network topology and routing for the services.
   - Call to internal functions directly creating named links to the script.
-  - Indicate by parameter a personalized script to run inside the deployed environment (apart from the hardcoded one to be compact at first).
+  - Indicate by parameter a personalized script to run inside the deployed environment (apart from the hardcoded one (for gcodis) to be compact at first).
 
 Versions
 ----
@@ -191,7 +191,7 @@ Versions
     - Copies the generated debootstrap
 	- Converts the deployed environment to LXC
   - The LXC container runs on Debian unstable
-  - The script can be used in OpenWrt trunk, which provides lxc commands and debootstrap
+  - The script can be used in OpenWrt trunk, which provides lxc commands (except lxc-create) and debootstrap
 
 Changelog
 ----
