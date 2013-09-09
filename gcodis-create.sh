@@ -255,8 +255,10 @@ create_debootstrap () {
     PACKAGES_URL=http://cdn.debian.net/debian
     
     # Check existence of previous build at $TARGET
-    echo "TODO: Check for the existence of a previous build at $TARGET and query for deletion."
+    echo "TODO: Check for the existence of a previous build at $TARGET and query for deletion or reuse."
     # If previous build exists, query for deletion or interrupt manually to operate the situation
+    # Or reuse the chroot directory
+    if [ -d $TARGET ] ; then return 0 ; fi
 
     # TODO: Here the default build directory doesn't exists, we can continue
 
@@ -580,6 +582,12 @@ echo "Guifi-Community-Distro"
 
 echo "To execute properly this script run it with root permissions. If you have root permissions you can run the command writing \"sh ./$0\" or try with the \"sudo ./$0\" command, please."
 
+if [ "$0" != "gcodis-create.sh" ] ; then 
+  `basename $0` $*
+  exit 0
+fi
+
+
 #### # Called with parameter install_gcodis
 # Install gcodis itself inside the system in which the script was called
 if [ "$1" = "install_gcodis" ] ; then
@@ -587,7 +595,7 @@ if [ "$1" = "install_gcodis" ] ; then
   exit 0
 fi
 
-#### # Normal execution
+#### # Normal execution (called without parameters) ($0=gcodis-create.sh)
 
 # Creates a Debian chroot using debootstrap
 checkinstall_debootstrap_requirements
@@ -615,7 +623,9 @@ install_gcodis_to_chroot /var/lib/lxc/gcodis-debug/rootfs/
 # Run the deployed environment if called with the default options
 #apt-get install lxc
 #opkg install lxc-start
-lxc-start -n gcodis-debug
+#lxc-start -n gcodis-debug
+echo "If you run the default script with default options you can test the generate container doing: 'lxc-start -n gcodis-debug'"
+
 
 # 2013-09-03: Tested on Debian GNU/Linux unstable
 # 2013-09-03: WIP on OpenWrt trunk
