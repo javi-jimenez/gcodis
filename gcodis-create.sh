@@ -3,6 +3,8 @@
 # Run scripts inside the chroot (useful for creating the base gcodis)
 # Deploy a copy to LXC, running the necessary conversions from chroot and generating the config file for the container
 
+# Some code is taken from the LXC project, and originally its licensed under LGPL.
+
 # If no parameters are given, creates the bootstrap, deploys to LXC and install the base gcodis inside, and run the deployed LXC container.
 
 #metainstall: packages and admin tasks to create gcodis itself
