@@ -1,0 +1,19 @@
+Guifi-Community-Distro Debian package
+=====================================
+
+*Experimental, requires Debian Wheezy*
+
+Package to install the base system.
+
+Build
+-----
+
+Build the package with the command:
+
+	dpkg-buildpackage -uc -us
+
+Metalinks
+---------
+
+Github repository: https://github.com/javi-jimenez/gcodis
+
