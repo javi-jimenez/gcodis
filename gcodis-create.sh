@@ -384,9 +384,11 @@ EOF
 
 copy_configuration()
 {
-    path=$1
+    path=$1 # where to put the config file (container name)
     rootfs=$2
     hostname=$3
+
+[ $debug ] && echo "copy_configuration: path=$path rootfs=$rootfs hostname=$hostname"
 
     grep -q "^lxc.rootfs" $path/config 2>/dev/null || echo "lxc.rootfs = $rootfs" >> $path/config
     cat <<EOF >> $path/config
@@ -432,7 +434,7 @@ EOF
 configure_lxc_network(){
   
   to=$1
-
+[ $debug ] && echo "configure_lxc_network: to=$to"
 
   # Generate random mac address
   # Source: http://serverfault.com/questions/299556/how-to-generate-a-random-mac-address-from-the-linux-command-line
@@ -482,7 +484,7 @@ deploy_to_lxc () {
     rootfs="$to/rootfs/"
 
     # debug
-    if [ $debug ] ; then echo "hostname=$hostname from=$from to=$to rootfs=$rootfs" ; fi
+    if [ $debug ] ; then echo "deploy_to_lxc: hostname=$hostname from=$from to=$to rootfs=$rootfs" ; fi
 
     if [ "$#" != 3 ] ; then
       echo "Usage: $0 hostname from to"
@@ -498,14 +500,16 @@ deploy_to_lxc () {
       mkdir -p $to
     echo "copy_debootstrap_to_containers_path $from $to $rootfs"
     copy_debootstrap_to_containers_path $from $to $rootfs
+echo "install_gcodis_to_chroot $rootfs"
+install_gcodis_to_chroot $rootfs
     echo "install_extra_packages $rootfs $hostname"
-    install_extra_packages $rootfs $hostname
+install_extra_packages $rootfs $hostname
     echo "configure_debian $rootfs $hostname"
     configure_debian $rootfs $hostname
-    echo "copy_configuration $to $rootfs $hostname"
-    copy_configuration $to $rootfs $hostname
-    echo "configure_lxc_network $to"
-    configure_lxc_network $to
+    echo "copy_configuration $rootfs/.. $rootfs $hostname"
+    copy_configuration $rootfs/.. $rootfs $hostname
+    echo "configure_lxc_network $rootfs/.."
+    configure_lxc_network $rootfs/..
 }
 
 #### # Install gcodis itself (this is the default option)
@@ -567,10 +571,10 @@ install_gcodis_to_chroot () {
   # Parameters
   to=$1
 
-
+[ $debug ] && echo "install_gcodis_to_chroot: to=$to"
 
   # copy the (this) script to the chroot
-  /bin/cp -v $0 $to/
+  /bin/cp -v -H $0 $to/
   # run the script with the parameter: install_gcodis
   # script name
   script=`basename $0`
@@ -584,12 +588,6 @@ echo "Guifi-Community-Distro"
 
 echo "To execute properly this script run it with root permissions. If you have root permissions you can run the command writing \"sh ./$0\" or try with the \"sudo ./$0\" command, please."
 
-if [ "$0" != "gcodis-create.sh" ] ; then 
-  `basename $0` $*
-  exit 0
-fi
-
-
 #### # Called with parameter install_gcodis
 # Install gcodis itself inside the system in which the script was called
 if [ "$1" = "install_gcodis" ] ; then
@@ -597,37 +595,41 @@ if [ "$1" = "install_gcodis" ] ; then
   exit 0
 fi
 
-#### # Normal execution (called without parameters) ($0=gcodis-create.sh)
-
-# Creates a Debian chroot using debootstrap
-checkinstall_debootstrap_requirements
-create_debootstrap 
-
-# Deploys the Debian chroot to a LXC container
-# TODO:- checkinstall_lxc_requirements -> 'lxc' or 'lxc-start'
-# deploy_to_lxc hostname from to
-deploy_to_lxc gcodis-debug /debootstrap-i386-wheezy-rootfs/ /var/lib/lxc/gcodis-debug/
-
-# Run metadmin script inside the target environment
-# In the default use case, the convert-to-gcodis.sh script does:
-#   - convert target environment to gcodis
-#   - fetch gcodis from github to $target/rootfs/gcodis.git for updates and extra functionallity
-#   - alternativelly, in place of fetch, we can copy the directory
-## - metadmin_inside 
-##  - 1.1 copy gcodis.git to deployment (this directory)
-##  - 2 run metadmin script inside the deployment
-#
-##- metadmin_inside_gcodis
-##  - run this script with the 'install_gcodis' parameter inside the chroot
-##    - actually run the function: install_gcodis_to_chroot $to
-install_gcodis_to_chroot /var/lib/lxc/gcodis-debug/rootfs/
-
-# Run the deployed environment if called with the default options
-#apt-get install lxc
-#opkg install lxc-start
-#lxc-start -n gcodis-debug
-echo "If you run the default script with default options you can test the generate container doing: 'lxc-start -n gcodis-debug'"
-
+# If a link is used, run the proper function, else give info about 
+# how to work with this script and functions.
+if [ -L `basename $0` ] ; then
+  `basename $0` $* 
+else
+  # do default deployment
+  checkinstall_debootstrap_requirements
+  # Creates a Debian chroot using debootstrap
+  create_debootstrap 
+  # default deployment to LXC, could use mktemp or similar
+  # Deploys the Debian chroot to a LXC container
+  # TODO:- checkinstall_lxc_requirements -> 'lxc' or 'lxc-start'
+  # deploy_to_lxc hostname from to
+  deploy_to_lxc gcodis-debug /debootstrap-i386-wheezy-rootfs/ /var/lib/lxc/gcodis-debug/
+  # Run metadmin script inside the target environment
+  # In the default use case, the convert-to-gcodis.sh script does:
+  #   - convert target environment to gcodis
+  #   - fetch gcodis from github to $target/rootfs/gcodis.git for updates and extra functionallity
+  #   - alternativelly, in place of fetch, we can copy the directory
+  ## - metadmin_inside 
+  ##  - 1.1 copy gcodis.git to deployment (this directory)
+  ##  - 2 run metadmin script inside the deployment
+  #
+  ##- metadmin_inside_gcodis
+  ##  - run this script with the 'install_gcodis' parameter inside the chroot
+  ##    - actually run the function: install_gcodis_to_chroot $to
+  install_gcodis_to_chroot /var/lib/lxc/gcodis-debug/rootfs/
+  # Optionally
+  # Run the deployed environment if called with the default options
+  #apt-get install lxc
+  #opkg install lxc-start
+  #lxc-start -n gcodis-debug
+  echo "If you run the default script with default options you can test the generate container doing: 'lxc-start -n gcodis-debug'"
+fi
 
 # 2013-09-03: Tested on Debian GNU/Linux unstable
-# 2013-09-03: WIP on OpenWrt trunk
+# 2013-09-03: WIP running on OpenWrt trunk
+
