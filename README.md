@@ -40,6 +40,11 @@ The install options for gcodis are:
 - Debian package: *experimental*. Sources available in the 'package' directory to generate the package. To be used in the project Debian packages repositories when available. This will be the next method for the installation process.
 - `deploy_to_lxc` link to `gcodis-create.sh`: reuses a previously created bootstrap as for example with the first step of this list, and do the rest of steps as `gcodis-create.sh` does avoiding the need of creating a new debootstrap.
 
+Cloning LXC containers
+----------------------
+
+For cloning LXC containers use the command: `lxc-clone gcodis-debug gcodis-newcontainer`, which clones the existing LXC container `gcodis-debug` to a new container with the name `gcodis-newcontainer`.
+
 Scripts
 -------
 
