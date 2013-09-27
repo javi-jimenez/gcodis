@@ -143,18 +143,14 @@ checkinstall_debootstrap_requirements () {
 
     echo "CAUTION: this installs the package 'debootstrap' and its"
     echo "requirements system wide."
-    echo " Installs the required packages 'binutils' and 'wget'"
-    echo "which are required for debootstrap."
+    echo " Installs the required packages 'binutils' for the 'ar' binary,"
+    echo "'wget', 'perl', and 'sha1sum' of 'coreutils'."
     echo " If you aren't on a Debian system, you can install previously"
-    echo "the packages 'binutils' (to get the binay 'ar')"
-    echo "'coreutils' or 'coreutils-sha1sum' to get the sha1sum file"
-    echo "and 'wget' with your usual installation system."
+    echo "the required packages."
     echo
     echo " * Press [enter] if you're on a Debian system."
     echo " * Press [enter] if you're not on a Debian system and you installed"
-    echo "   previously the:"
-    echo "     - 'binutils' package to get the 'ar' binary"
-    echo "     - 'wget' package"
+    echo "   previously the package requirements."
     echo " * Press [ctrl+c] if you aren't on a Debian system AND"
     echo "   you haven't installed the previous mentioned required packages."
     echo "   Then, please install them manually"
@@ -257,9 +253,7 @@ create_debootstrap () {
     PACKAGES_URL=http://cdn.debian.net/debian
     
     # Check existence of previous build at $TARGET
-    echo "TODO: Check for the existence of a previous build at $TARGET and query for deletion or reuse."
-    # If previous build exists, query for deletion or interrupt manually to operate the situation
-    # Or reuse the chroot directory
+    # Reuse the debootstrap chroot directory
     if [ -d $TARGET ] ; then return 0 ; fi
 
     # TODO: Here the default build directory doesn't exists, we can continue
@@ -466,50 +460,75 @@ EOF
 
 #### ## BEGIN main lxc
 
+# deploy the debootstrap to a LXC directory
+# ex.: for the container gcodis-debug
+# the LXC directory has:
+# /var/lib/lxc/gcodis-debug as base dir
+# /var/lib/lxc/gcodis-debug/config as config file
+# /var/lib/lxc/gcodis-debug/rootfs/ as rootfs
+# ex. call: $hostname [$from [$to]]
+# deploy_to_lxc
+# deploy_to_lxc gcodis-debug
+# deploy_to_lxc gcodis-debug /dbstrap/
+# deploy_to_lxc gcodis-debug /dbstrap/ /var/lib/lxc/gcodis-debug
 deploy_to_lxc () {
 
     # debug
     debug=1
 
-    # Input
-    # Parameters from the command line:
-    # hostname=$1 from=$2 to=$3 rootfs=$path/rootfs
-    hostname="$1"
-    from="$2/"
-    # place where the container will be with its name
-    # LXC containers main directory
-    # By default its $to=/var/lib/lxc/debug-gcodis
-    # $to can be derived from hostname?
-    to="$3/"
-    rootfs="$to/rootfs/"
+hostname="$1"
+from="$2/"
+to="$3/"
 
-    # debug
-    if [ $debug ] ; then echo "deploy_to_lxc: hostname=$hostname from=$from to=$to rootfs=$rootfs" ; fi
+# default values
+case $# in
+  1)
+    # redefined hostname in command line
+    from=/debootstrap-i386-wheezy-rootfs/
+    to=/var/lib/lxc/$hostname/
+  ;;
+  2)
+    # redefined hostname in command line
+    # redefined from     in command line
+    to=/var/lib/lxc/$1/
+  ;;
+  3)
+    # redefined hostname in command line
+    # redefined from     in command line
+    # redefined to       in command line
+    # ok, all redefined
+  ;;
+  *)
+    echo "Usage: $0 hostname [from [to]]"
+    echo "Parameters:"
+    echo "  - hostname: the hostname for the deployed LXC container (if only this parameter is present, will be deployed by default from /debootstrap-i386-wheezy-rootfs/ to /var/lib/lxc/hostname)"
+    echo "  - from: path for the already generated debootstrap to be deployed (if only 'hostname' and 'from' parameters are present, the default is to deploy the 'from' directory to /var/lib/lxc/hostname)"
+    echo "  - to: where to deploy the LXC container. The debootstrap directory 'from' will be deployed as a Linux Container in the given 'to' directory with the container name as 'hostname'."
+    exit 1
+  ;;
+esac
 
-    if [ "$#" != 3 ] ; then
-      echo "Usage: $0 hostname from to"
-      echo "Parameters:"
-      echo "  - hostname: the hostname for the deployed LXC container (will be deployed by default in /var/lib/lxc/hostname)"
-      echo "  - from: path for the already generated debootstrap to be deployed"
-      echo "  - to: where to deploy the LXC container (by default is /var/lib/lxc)"
-      exit 1
-    fi
+  rootfs="$to/rootfs/"
 
-    # main
-    # TODO
-      mkdir -p $to
-    echo "copy_debootstrap_to_containers_path $from $to $rootfs"
-    copy_debootstrap_to_containers_path $from $to $rootfs
-echo "install_gcodis_to_chroot $rootfs"
-install_gcodis_to_chroot $rootfs
-    echo "install_extra_packages $rootfs $hostname"
-install_extra_packages $rootfs $hostname
-    echo "configure_debian $rootfs $hostname"
-    configure_debian $rootfs $hostname
-    echo "copy_configuration $rootfs/.. $rootfs $hostname"
-    copy_configuration $rootfs/.. $rootfs $hostname
-    echo "configure_lxc_network $rootfs/.."
-    configure_lxc_network $rootfs/..
+  # debug
+  if [ $debug ] ; then echo "deploy_to_lxc: hostname=$hostname from=$from to=$to rootfs=$rootfs" ; fi
+
+  # main
+  # TODO
+  [ $debug ] && echo "deploy_to_lxc: mkdir -p $to"
+  mkdir -p $to #|| exit 1
+  [ $debug ] && echo "deploy_to_lxc: copy_debootstrap_to_containers_path $from $to $rootfs"
+  copy_debootstrap_to_containers_path $from $to $rootfs  || exit 1
+  [ $debug ] && echo "deploy_to_lxc: install_gcodis_to_chroot $rootfs"
+  install_gcodis_to_chroot $rootfs  || exit 1
+  [ $debug ] && echo "deploy_to_lxc: install_extra_packages $rootfs $hostname" 
+  install_extra_packages $rootfs $hostname  || exit 1 1
+  [ $debug ] && echo "deploy_to_lxc: configure_debian $rootfs $hostname"
+  configure_debian $rootfs $hostname || exit 1
+  [ $debug ] && echo "deploy_to_lxc: copy_configuration $rootfs/.. $rootfs $hostname"
+  copy_configuration $rootfs/.. $rootfs $hostname || exit 1
+  [ $debug ] && echo "deploy_to_lxc: configure_lxc_network $rootfs/.."
+  configure_lxc_network $rootfs/.. || exit 1
 }
 
 #### # Install gcodis itself (this is the default option)
@@ -540,9 +559,10 @@ install_gcodis () {
   # Repositorio oficial de Guifi.net
   echo 'deb http://serveis.guifi.net/debian guifi/' > /etc/apt/sources.list.d/guifi.net-stable.list
   # Una vez añadida esta línea, como el repositorio está firmado, se tiene que introducir la clave pública la primera vez que lo uséis, para hacerlo se tiene que ejecutar este comando:
-  apt-key adv --keyserver pgp.mit.edu --recv-keys 2E484DAB
+  #apt-key adv --keyserver pgp.mit.edu --recv-keys 2E484DAB
   # Algunas veces este "keyserver" no responde, así que si da algun otro error, probad con este otro:
-  apt-key adv --keyserver pgp.rediris.es --recv-keys 2E484DAB
+  #apt-key adv --keyserver pgp.rediris.es --recv-keys 2E484DAB
+  apt-key adv --keyserver pgp.mit.edu --recv-keys 2E484DAB || apt-key adv --keyserver pgp.rediris.es --recv-keys 2E484DAB
   # Finalmente actualizaremos el repositorio de nuestro sistema con: 
   apt-get update
   # END   guifi.net distro
@@ -573,20 +593,21 @@ install_gcodis_to_chroot () {
 
 [ $debug ] && echo "install_gcodis_to_chroot: to=$to"
 
+orig=`readlink $0`
+orig_basename=`basename $orig`
+
   # copy the (this) script to the chroot
-  /bin/cp -v -H $0 $to/
+  # /bin/cp -v -H $0 $to/
+  # with it's original name
+  /bin/cp -v $0 $to/$orig_basename
   # run the script with the parameter: install_gcodis
   # script name
-  script=`basename $0`
-  chroot $to/ /bin/sh /$script install_gcodis
-
+  #script=`basename $0`
+  #chroot $to/ /bin/sh /$script install_gcodis
+  chroot $to/ /bin/sh /$orig_basename install_gcodis
 }
 
 #### Main Algorithm
-
-echo "Guifi-Community-Distro"
-
-echo "To execute properly this script run it with root permissions. If you have root permissions you can run the command writing \"sh ./$0\" or try with the \"sudo ./$0\" command, please."
 
 #### # Called with parameter install_gcodis
 # Install gcodis itself inside the system in which the script was called
@@ -600,6 +621,11 @@ fi
 if [ -L `basename $0` ] ; then
   `basename $0` $* 
 else
+  echo "Guifi-Community-Distro - default step-by-step installation"
+  echo "To execute properly this script run it with root permissions. If you have root permissions you can run the command writing \"sh ./$0\" or try with the \"sudo ./$0\" command, please."
+  echo "This script installs a Debian Wheezy debootstrap in '/debootstrap-i386-wheezy-rootfs/', then copy it to the default LXC containers path '/var/lib/lxc/' creating a container with the name 'gcodis-debug' with the full path being '/var/lib/lxc/gcodis-debug/' and convert it to a gcodis installation."
+  echo "Press [enter] when ready."
+  read a
   # do default deployment
   checkinstall_debootstrap_requirements
   # Creates a Debian chroot using debootstrap
@@ -621,13 +647,14 @@ else
   ##- metadmin_inside_gcodis
   ##  - run this script with the 'install_gcodis' parameter inside the chroot
   ##    - actually run the function: install_gcodis_to_chroot $to
-  install_gcodis_to_chroot /var/lib/lxc/gcodis-debug/rootfs/
+  # Already done by deploy_to_lxc:
+  #  install_gcodis_to_chroot /var/lib/lxc/gcodis-debug/rootfs/
   # Optionally
   # Run the deployed environment if called with the default options
   #apt-get install lxc
   #opkg install lxc-start
   #lxc-start -n gcodis-debug
-  echo "If you run the default script with default options you can test the generate container doing: 'lxc-start -n gcodis-debug'"
+  echo "If you run the default script with default options you can test the default generated 'gcodis-debug' container doing: 'lxc-start -n gcodis-debug'"
 fi
 
 # 2013-09-03: Tested on Debian GNU/Linux unstable
