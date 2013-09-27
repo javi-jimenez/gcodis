@@ -30,6 +30,16 @@ Apart from the standard services, initially the project offers two services:
 
 **The project is based on Avahi.**
 
+Install options
+---------------
+
+The install options for gcodis are:
+
+- `gcodis-create.sh` script: creates a Debian Wheezy debootstrap, copies it to a LXC container, and configures the container. Useful to deploy a gcodis distro inside OpenWrt or some other generic LXC container.
+- `gcodis-create.sh install_gcodis`: if you copy the script to an existing Debian installation and run the said command, it converts the local Debian installation into a gcodis distro. Useful for an existing Debian installation. If the original distro is Debian Squeeze, the script converts it into a Wheezy, if it's already a Wheezy it's ok. Later installs the distro in the local Debian Wheezy installation.
+- Debian package: *experimental*. Sources available in the 'package' directory to generate the package. To be used in the project Debian packages repositories when available. This will be the next method for the installation process.
+- `deploy_to_lxc` link to `gcodis-create.sh`: reuses the previously created bootstrap and do the rest as in the first step of this list.
+
 Scripts
 -------
 
