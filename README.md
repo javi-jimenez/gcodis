@@ -1,5 +1,5 @@
 Guifi-Community-Distro (gcodis)
-======
+===============================
 
 Guifi-Community-Distro
 
@@ -16,12 +16,12 @@ Now we use a manually created Wheezy distro from a Squeeze with the required sof
 The project is related to the Confine and Clommunity projects.
 
 Objective
-----
+---------
 
 A first objective is to convert a Debian GNU/Linux software distribution in a software distribution to be used by the guifi.net community and by all in general, and then provide scripts to configure the system automatically using Avahi as a base for publishing and sharing services; a service can be Tahoe-LAFS, a distributed file system.
 
 Services
-----
+--------
 
 Apart from the standard services, initially the project offers two services:
 
@@ -31,19 +31,19 @@ Apart from the standard services, initially the project offers two services:
 **The project is based on Avahi.**
 
 Scripts
-----
+-------
 
 (for automation)
 
 Initial revision in Bash to be ported to Chef to open collaboration with an standard system.
 
 Automation
-----
+----------
 
 Automatically install a Debian, apply scripts and plug in to the Community Network a new auto-configuring node publishing basic services for all.
 
 Requirements
-----
+------------
 
 The project requires:
 - Debian GNU/Linux (tested on unstable) or OpenWrt. Perhaps Ubuntu or Debian derivatives.
@@ -58,7 +58,7 @@ The project requires:
 - If you generate LXC containers AND ONLY IF you plan to run the container you need the LXC utilities. The script to run the container is *lxc-start* usually in the *lxc* package in Debian or *lxc-start* package in OpenWrt.
 
 Build Guifi-Community-Distro
-----
+----------------------------
 
 You need root permissions.
 
@@ -67,7 +67,7 @@ You can work with two directories: *./gcodis.git*, with a clone of this git repo
 To build the Guifi-Community-Distro you can clone the repository, copy or fetch directly the script, cd into the cloned directory (if cloned) and run the command: **sudo sh gcodis-create.sh**
 
 Sharing the build script
-----
+------------------------
 
 You can share the script to easily build the Guifi-Community-Distro.
 
@@ -90,17 +90,17 @@ After running the main task, you can deploy it in some other flavours as LXC usi
 You can share the commands in the next section to automatically build the debootstrap, convert to LXC and test the container in your system.
 
 Deploy debootstrap to a LXC container
-----
+-------------------------------------
 
 After generating the debootstrap, and if run with the default no parameters, the script automates the process and convert (copies) it to LXC and run the LXC container. The created chroot with debootstrap is untouched and can be reused to deploy into other environments or into LXC again.
 
 From scratch
-----
+------------
 
 This is an exercise of import and organize some scripts, patches and experiment files used in previous deployments of prior gcodis versions deployed at the Community-Lab Controller, a testbed of the CONFINE project.
 
 System Administration tools
-----
+---------------------------
 
 After the organization and migration of the original bash scripts to this git repository, perhaps it's a good idea to work with tools for system administration as:
 
@@ -112,8 +112,8 @@ Both tools can be used to create a basic and portable chroot environment and lat
 
 - *lxc-setup-root* can be used to create a *LXC* chroot environment. Then *lxc-setup-container* can be used to create the container itself for a *chroot* environment. As we use *debootstrap* to create the chroot environment, we can later use the tools *lxc-setup-container* to add our created container to the LXC standard list of containers. But this tools are for Ubuntu only ( http://sosedoff.com/2013/02/11/lightweight-virtualization-with-lxc.html ).
 
-How to use the Guifi-Community-Distro and what to do
-----
+How to use the Guifi-Community-Distro and What to do
+----------------------------------------------------
 
 You can do what you usually do with Avahi and some Tahoe related tasks:
 - Publish and browse published services.
@@ -157,16 +157,6 @@ This is a Work In Progress (WIP). That is another project needed for this one.
 
 To be used in a network with routers between multicast packets.
 
-DONE
-----
-
-- Deploy in a LXC container.
-- Manually created template for Community-Lab from an existing debian02.tgz template, with running Avahi and Tahoe, and guinux sources.list; including some patches. Uploaded template to Controller, latest version is v1.1. The template is complemented with experiment files.
-- Generate new distro from scratch.
-- Convert the generated debootstrap to a LXC container and deploy it. Prepared to be run after deploying it.
-- Build the distro entirely from the ground. The first release is "gcodis from scratch" using bash scripts.
-- To join the template and the experiment data used in the Community-Lab testbed. There were two files: template and experiment data.
-
 TODO
 ----
 
@@ -181,25 +171,25 @@ TODO
   - Call to internal functions directly creating named links to the script.
   - Indicate by parameter a personalized script to run inside the deployed environment (apart from the hardcoded one (for gcodis) to be compact at first).
 
-Versions
-----
-
-- v2.0, 2013-09-04
-  - Unify scripts and functions in one only script
-  - Generates chroot environment with debootstrap
-  - Deploy to a LXC container
-    - Copies the generated debootstrap
-	- Converts the deployed environment to LXC
-  - The LXC container runs on Debian unstable
-  - The script can be used in OpenWrt trunk, which provides lxc commands (except lxc-create) and debootstrap
-
 Changelog
-----
+---------
+
+- 2013-09-27
+  - v0.3.0
+
+- 2013-09-26
+  - Reorganize the code
+  - Correct some bugs
+  - Test on Debian unstable. Clone the repo, run the script gcodis-create.sh and later the link deploy_to_lxc to generate the distro.
+  - Create the 'package' directory for generating a package to install the distro in an existing Debian, Wheezy at least, installation.
+
+- 2013-09-04
+  - v0.2.0
 
 - 2013-09-03
   - Reorganize the project in one only script *gcodis-create.sh*.
   - Tested and running on Debian/GNU Linux unstable. debootstrap generation, deploy to LXC and run LXC.
-  - For OpenWrt the LXC container is generated, but we're in the stage of running successfully the command *lxc-start -n gcodis-debug*.
+  - For OpenWrt the LXC container is generated, but we're in the stage of running successfully the command *lxc-start -n gcodis-debug*. The script can be used in OpenWrt trunk, which provides most lxc commands (except lxc-create) and provides too the debootstrap command
 
 - 2013-08-30
   - Commit the deploy from debootstrap to a LXC container. You can now test the distro inside a LXC container.
@@ -214,8 +204,17 @@ Changelog
   - Sorted TODO and organize in versions.
   - Explanation about the files and directories used.
 
+- 2013
+  - Deploy in a LXC container.
+  - Manually created template for Community-Lab from an existing debian02.tgz template, with running Avahi and Tahoe, and guinux sources.list; including some patches. Uploaded template to Controller, latest version is v1.1. The template is complemented with experiment files.
+  - Generate new distro from scratch.
+  - Convert the generated debootstrap to a LXC container and deploy it. Prepared to be run after deploying it.
+  - Build the distro entirely from the ground. The first release is "gcodis from scratch" using bash scripts.
+  - To join the template and the experiment data used in the Community-Lab testbed. There were two files: template and experiment data.
+
+
 Source code
-----
+-----------
 
 The code is provided as the code used to generate and test the distribution for a project.
 
