@@ -43,7 +43,7 @@ The install options for gcodis are:
 Cloning LXC containers
 ----------------------
 
-For cloning LXC containers use the command: `lxc-clone gcodis-debug gcodis-newcontainer`, which clones the existing LXC container `gcodis-debug` to a new container with the name `gcodis-newcontainer`.
+For cloning LXC containers use the command: `lxc-clone -o gcodis-debug -n gcodis-newcontainer`, which clones the existing LXC container `gcodis-debug` to a new container with the name `gcodis-newcontainer`.
 
 Scripts
 -------
