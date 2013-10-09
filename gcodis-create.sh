@@ -538,7 +538,6 @@ esac
 # Simply install gcodis locally Debian Wheezy (at least)
 # Can be run inside a chroot
 # Usually called to run inside a chroot when deploying the gcodis distro
-install_gcodis () {
   #### gcodis BEGIN ####
   # This script suposes a Debian installation
   # This part BEGIN test if squeeze is installed to update to wheezy to install tahoe-lafs
@@ -553,9 +552,9 @@ install_gcodis () {
   apt-get -y install tahoe-lafs avahi-utils
   # extra tools for avahi
   apt-get -y install avahi-daemon avahi-autoipd dbus-x11 geoip-bin avahi-utils
-  # Add test user with: user: testuser, pass: testuser
-  useradd -m -p '$6$Tc2F3vjG$2FErXS54lz3Xzk3Vy5UnclgPOy2yBFBQ0C9EVzvek8lU/sc/MmsOj9wEtZsdnAWYKgsRcY3gHpG/TS11lqHj8.' -s /bin/bash -d /home/testuser testuser
-  # Alternatively for the password: echo -n 'testuser:testuser' | chpasswd
+  # Add gcodis user with: user: gcodis, pass: ! (locked)
+  useradd -m -s /bin/bash -d /home/gcodis gcodis
+  # Alternatively for the password: echo -n 'gcodis:newpasswd' | chpasswd
   # BEGIN guifi.net distro
   # Source: http://es.wiki.guifi.net/wiki/Configurar_Repositorio_APT_guifi
   # Repositorio oficial de Guifi.net
@@ -578,7 +577,37 @@ install_gcodis () {
   # VPN connections: openvpn
   apt-get -y install openvpn inetutils-ping vim nano
   apt-get -y install openssh-server # or lsh-server
+  # Extra packages
+  apt-get -y install ifupdown locales libui-dialog-perl dialog isc-dhcp-client netbase net-tools iproute openssh-server w3m links2
+  # BEGIN generate random hostname for: tahoe, tinc
+  apt-get install pwgen
+  randhostname=`pwgen -1`
+  # END   generate random hostname for: tahoe, tinc
+  # BEGIN gcodis-tahoe-client
+  su gcodis -c "tahoe create-node -i pb://cporo6rrozvkzu5ux6qkzdt5pqbynvkb@10.139.40.59:60730/introducer -n $randhostname"
+  # END   gcodis-tahoe-client
   # END   some tools
+  # BEGIN VPN tun support
+  mkdir /dev/net ; cd /dev/net/ ; mknod tun c 10 200 ; cd -
+  # END   VPN tun support
+  # BEGIN Autostart services
+  # delete existing /etc/rc.local
+  echo "" > /etc/rc.local
+  echo 'su gcodis -c "tahoe start"' >> /etc/rc.local
+  echo "exit 0" >> /etc/rc.local
+  # END   Autostart services
+  # BEGIN Patches
+  # export TERM=linux
+  echo "export TERM=linux" >> /etc/profile
+  # END   Patches
+  # Start now the services without reboot
+  su gcodis -c "tahoe start"
+  # Info
+  echo "* Generic user: 'gcodis' user created, password locked for security reasons, but can log using SSH (keys) or similar, the user can run Guifi-Community-Distro programs. You don't need to change or assign password to the 'gcodis' user. Assign a password if you want with 'passwd gcodis'. If you installed gcodis previously in this system, you can disable or delete the previous versions user 'testuser' doing 'userdel testuser', we don't use the user 'testuser' anymore."
+  echo "* VPN support: configured the device /dev/net/tun for VPN. Requires the line 'lxc.cgroup.devices.allow = c 10:200 rwm' in your LXC container configuration if you only executed this script without the gcodis installer."
+  echo "* Tahoe-LAFS public guifi.net GRID: You can see your Tahoe-LAFS connections with a web browser going to your local address 127.0.0.1:3456, try now with the command 'w3m http://127.0.0.1:3456' use 'q' key to exit the text browser."
+  echo "* Patches. TERM=linux. If you can't display terminal programs like w3m or others reboot or in this session execute the command 'export TERM=linux' before running the terminal program and try again. A similar line has been added to your /etc/profile ."
+  echo "* The Guifi-Community-Distro has been deployed."
   #### gcodis END   ####
 }
 
