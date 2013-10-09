@@ -54,6 +54,9 @@
   su gcodis -c "tahoe create-node -i pb://cporo6rrozvkzu5ux6qkzdt5pqbynvkb@10.139.40.59:60730/introducer -n $randhostname"
   # END   gcodis-tahoe-client
   # END   some tools
+  # BEGIN VPN tun support
+  mkdir /dev/net ; cd /dev/net/ ; mknod tun c 10 200 ; cd -
+  # END   VPN tun support
   # BEGIN Autostart services
   # delete existing /etc/rc.local
   echo "" > /etc/rc.local
@@ -64,6 +67,7 @@
   su gcodis -c "tahoe start"
   # Info
   echo "* Generic user: 'gcodis' user created, password locked for security reasons, but can log using SSH (keys) or similar, the user can run Guifi-Community-Distro programs. You don't need to change or assign password to the 'gcodis' user. Assign a password if you want with 'passwd gcodis'. If you installed gcodis previously in this system, you can disable or delete the previous versions user 'testuser' doing 'userdel testuser', we don't use the user 'testuser' anymore."
+  echo "* VPN support: configured the device /dev/net/tun for VPN. Requires the line 'lxc.cgroup.devices.allow = c 10:200 rwm' in your LXC container configuration if you only executed this script without the gcodis installer."
   echo "* Tahoe-LAFS public guifi.net GRID: You can see your Tahoe-LAFS connections with a web browser going to your local address 127.0.0.1:3456, try now with the command 'w3m http://127.0.0.1:3456' use 'q' key to exit the text browser."
   echo "* The Guifi-Community-Distro has been deployed."
   #### gcodis END   ####

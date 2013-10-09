@@ -409,6 +409,8 @@ lxc.cgroup.devices.allow = c 136:* rwm
 lxc.cgroup.devices.allow = c 5:2 rwm
 # rtc
 lxc.cgroup.devices.allow = c 254:0 rwm
+#tun
+lxc.cgroup.devices.allow = c 10:200 rwm
 
 # mounts point
 lxc.mount.entry = proc proc proc nodev,noexec,nosuid 0 0
