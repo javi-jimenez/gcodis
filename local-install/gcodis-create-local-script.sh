@@ -63,11 +63,16 @@
   echo 'su gcodis -c "tahoe start"' >> /etc/rc.local
   echo "exit 0" >> /etc/rc.local
   # END   Autostart services
+  # BEGIN Patches
+  # export TERM=linux
+  echo "export TERM=linux" >> /etc/profile
+  # END   Patches
   # Start now the services without reboot
   su gcodis -c "tahoe start"
   # Info
   echo "* Generic user: 'gcodis' user created, password locked for security reasons, but can log using SSH (keys) or similar, the user can run Guifi-Community-Distro programs. You don't need to change or assign password to the 'gcodis' user. Assign a password if you want with 'passwd gcodis'. If you installed gcodis previously in this system, you can disable or delete the previous versions user 'testuser' doing 'userdel testuser', we don't use the user 'testuser' anymore."
   echo "* VPN support: configured the device /dev/net/tun for VPN. Requires the line 'lxc.cgroup.devices.allow = c 10:200 rwm' in your LXC container configuration if you only executed this script without the gcodis installer."
   echo "* Tahoe-LAFS public guifi.net GRID: You can see your Tahoe-LAFS connections with a web browser going to your local address 127.0.0.1:3456, try now with the command 'w3m http://127.0.0.1:3456' use 'q' key to exit the text browser."
+  echo "* Patches. TERM=linux. If you can't display terminal programs like w3m or others reboot or in this session execute the command 'export TERM=linux' before running the terminal program and try again. A similar line has been added to your /etc/profile ."
   echo "* The Guifi-Community-Distro has been deployed."
   #### gcodis END   ####
