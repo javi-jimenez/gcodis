@@ -685,6 +685,7 @@ else
   #apt-get install lxc
   #opkg install lxc-start
   #lxc-start -n gcodis-debug
+  echo "* Info: Please, use the command 'lxc-clone -o gcodis-debug -n yournewcontainer' if you want to clone the default gcodis container and work with it."
   echo "If you run the default script with default options you can test the default generated 'gcodis-debug' container doing: 'lxc-start -n gcodis-debug'"
 fi
 
