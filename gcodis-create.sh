@@ -626,8 +626,13 @@ install_gcodis_to_chroot () {
 
 [ $debug ] && echo "install_gcodis_to_chroot: to=$to"
 
-orig=`readlink $0`
-orig_basename=`basename $orig`
+# Basename for this script itself, being a link or a regular file
+if [ -L $0 ] ; then
+  orig=`readlink $0`
+  orig_basename=`basename $orig`
+else
+  orig_basename=`basename $0`
+fi
 
   # copy the (this) script to the chroot
   # /bin/cp -v -H $0 $to/
