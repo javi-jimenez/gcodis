@@ -409,7 +409,7 @@ lxc.cgroup.devices.allow = c 136:* rwm
 lxc.cgroup.devices.allow = c 5:2 rwm
 # rtc
 lxc.cgroup.devices.allow = c 254:0 rwm
-#tun
+# tun for VPN
 lxc.cgroup.devices.allow = c 10:200 rwm
 
 # mounts point
