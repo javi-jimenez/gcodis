@@ -297,6 +297,7 @@ install_extra_packages () {
 
   rootfs=$1
 
+  chroot $rootfs apt-get -y update
   chroot $rootfs apt-get -y install ifupdown locales libui-dialog-perl dialog isc-dhcp-client netbase net-tools iproute openssh-server
 
 }
@@ -524,7 +525,7 @@ esac
   [ $debug ] && echo "deploy_to_lxc: install_gcodis_to_chroot $rootfs"
   install_gcodis_to_chroot $rootfs  || exit 1
   [ $debug ] && echo "deploy_to_lxc: install_extra_packages $rootfs $hostname" 
-  install_extra_packages $rootfs $hostname  || exit 1 1
+  install_extra_packages $rootfs $hostname  || exit 1
   [ $debug ] && echo "deploy_to_lxc: configure_debian $rootfs $hostname"
   configure_debian $rootfs $hostname || exit 1
   [ $debug ] && echo "deploy_to_lxc: copy_configuration $rootfs/.. $rootfs $hostname"
