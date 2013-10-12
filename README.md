@@ -189,6 +189,11 @@ TODO
 Changelog
 ---------
 
+- 2013-10-12
+  - v0.4.0
+  - Work on some bugs
+  - Tested on Ubuntu: gcodis-create.sh and deploy_to_lxc
+
 - 2013-09-27
   - v0.3.0
 
