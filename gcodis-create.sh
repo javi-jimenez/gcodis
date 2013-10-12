@@ -535,11 +535,10 @@ esac
 
 #### # Install gcodis itself (this is the default option)
 
-install_gcodis () {
-
 # Simply install gcodis locally Debian Wheezy (at least)
 # Can be run inside a chroot
 # Usually called to run inside a chroot when deploying the gcodis distro
+install_gcodis () {
   #### gcodis BEGIN ####
   # This script suposes a Debian installation
   # This part BEGIN test if squeeze is installed to update to wheezy to install tahoe-lafs
