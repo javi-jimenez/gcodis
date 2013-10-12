@@ -535,6 +535,8 @@ esac
 
 #### # Install gcodis itself (this is the default option)
 
+install_gcodis () {
+
 # Simply install gcodis locally Debian Wheezy (at least)
 # Can be run inside a chroot
 # Usually called to run inside a chroot when deploying the gcodis distro
