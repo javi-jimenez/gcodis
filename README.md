@@ -175,6 +175,8 @@ To be used in a network with routers between multicast packets.
 TODO
 ----
 
+  - Make packages for each one of the services as a client.
+  - Add *getopts* to each one of the script functions.
   - Import patch for Avahi config files.
   - Import tahoe service definition file for Avahi.
   - Complete and import the tahoe scripts. Needed node distribution.
@@ -192,7 +194,7 @@ Changelog
 - 2013-10-12
   - v0.4.0
   - Work on some bugs
-  - Tested on Ubuntu: gcodis-create.sh and deploy_to_lxc
+  - Tested on Ubuntu and Debian unstable: gcodis-create.sh and deploy_to_lxc
 
 - 2013-09-27
   - v0.3.0
