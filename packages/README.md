@@ -8,7 +8,7 @@ Metapackages
 
 Description of the metapackages.
 
-- gcodis: Installs the entire distribution in a single machine. Depends on (installs): *gcodis-server* and *gcodis-client*.
-- gcodis-server: Installs all the server packages.
-- gcodis-client: Installs all the client packages.
+- `gcodis`: Installs the entire distribution in a single machine. Depends on (installs): *gcodis-server* and *gcodis-client*.
+- `gcodis-server`: Installs all the server packages.
+- `gcodis-client`: Installs all the client packages.
 
