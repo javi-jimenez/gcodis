@@ -1,6 +1,8 @@
 Guifi-Community-Distro Debian package
 =====================================
 
+*This is an example package which installs a minimal gcodis client deployment.*
+
 *Experimental, requires Debian Wheezy*
 
 Package to install the base system.
