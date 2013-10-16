@@ -191,10 +191,15 @@ TODO
 Changelog
 ---------
 
+- 2013-10-16
+  - */packages/* directory created.
+  - Architecture is now client-server it's inside the T2.1 task which belongs to the WP2 Clommunity project.
+
 - 2013-10-12
   - v0.4.0
   - Work on some bugs
   - Tested on Ubuntu and Debian unstable: gcodis-create.sh and deploy_to_lxc
+  - Connects to a public Tahoe-LAFS Grid inside the guifi.net Community Network, must be inside the CN to connect and work.
 
 - 2013-09-27
   - v0.3.0
