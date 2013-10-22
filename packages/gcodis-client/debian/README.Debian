@@ -1,0 +1,12 @@
+gcodis-client Guifi-Community-Distro metapackage
+================================================
+
+Installs client-side packages for the Guifi-Community-Distro.
+
+This metapackage will install all the client packages for the distro.
+Depends on `gcodis-base`.
+
+Useful to set up a full client installation.
+
+ -- Javi Jiménez (guifi.net Foundation) <javi.jimenez@guifi.net>  Mon, 21 Oct 2013 13:10:18 +0200
+

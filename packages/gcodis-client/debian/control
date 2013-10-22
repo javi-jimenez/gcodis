@@ -1,0 +1,16 @@
+Source: gcodis-client
+Section: unknown
+Priority: extra
+Maintainer: Javi Jiménez (guifi.net Foundation) <javi.jimenez@guifi.net>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+Homepage: https://www.github.com/javi-jimenez/gcodis
+#Vcs-Git: git://git.debian.org/collab-maint/gcodis-client.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/gcodis-client.git;a=summary
+
+Package: gcodis-client
+Architecture: all
+Depends: ${misc:Depends}
+Description: Installs the gcodis-client with dependencies.
+  This is a package to install gcodis client dependencies for the
+  Guifi-Community-Distro software distribution.

@@ -1,0 +1,5 @@
+server.conf always exists
+
+- some IP
+- loopbackip for looopback serverandclient tests
+

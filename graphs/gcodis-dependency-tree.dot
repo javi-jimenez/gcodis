@@ -1,0 +1,50 @@
+# dot -Tpng gcodis.dot > gcodis.png ; geeqie gcodis.png
+digraph G {
+
+label="\n\nExplanation: if you install gcodis, it depends and install gcodis_server and gcodis_client, \nthis case can be used for local testing of the entire system in one host (127.0.0.1).\n\nClients depend on an existing and well known server.\n\nSteps:\n\n1.- Generate gcodis_server. Write down IP and services URL.\n2.- Generate gcodis_client with the server parameters.\n\n\ngcodis dependency tree, 2013-10-17."
+
+        // metapackages
+	gcodis_base->avahi
+	gcodis_base->generic_user_adduser_gcodis_locked_passwd
+	gcodis->gcodis_server
+	gcodis_server->tinc_server
+	gcodis_server->tahoe_server_introducer
+	gcodis->gcodis_client
+	gcodis_client->tinc_client
+	gcodis_client->tahoe_client_node
+	gcodis_client->owncloud_client
+
+	// task: apt-get -y install avahi-daemon avahi-utils
+	//avahi
+
+	// task: apt-get -y install tinc
+	//tinc
+	tinc_client->tinc
+	tinc_client->gcodis_base
+	tinc_server->tinc
+	tinc_server->gcodis_base
+
+	// task: apt-get -y install tahoe-lafs
+	//tahoe
+	tahoe_client_node->tahoe
+	tahoe_client_node->gcodis_base
+	tahoe_server_introducer->tahoe
+	tahoe_server_introducer->gcodis_base
+
+
+	// task: fetch, install and configure n distributed filesystems
+	n_distributed_filesystems->gcodis_base
+
+	// task: add key and sources.list && apt-get -y install owncloud
+	owncloud_client->owncloud
+	owncloud_client->tahoe_client_node
+
+        // task: add other distributed filesystems
+	owncloud_client->n_distributed_filesystems
+
+
+	// task: add key and sources.list guinux (guifi.net distro)
+	gcodis_base->guinux
+	
+}
+

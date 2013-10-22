@@ -1,0 +1,35 @@
+### Commented entries have reasonable defaults.
+### Uncomment to edit them.
+# Source: <source package name; defaults to package name>
+Source: gcodis-base
+Section: misc
+Priority: optional
+# Homepage: <enter URL here; no default>
+Maintainer: Javi Jiménez <javi.jimenez@guifi.net>
+Standards-Version: 3.9.2
+
+
+Package: gcodis-base
+#Package: <package name; defaults to equivs-dummy>
+# Version: <enter version here; defaults to 1.0>
+Version: 0.1
+# Maintainer: Your Name <yourname@example.com>
+# Pre-Depends: <comma-separated list of packages>
+Depends: avahi-utils, avahi-daemon, avahi-autoipd, dbus-x11, geoip-bin, openvpn, iputils-ping, vim, nano, openssh-server
+# Depends: <comma-separated list of packages>
+# Recommends: <comma-separated list of packages>
+# Suggests: <comma-separated list of packages>
+# Provides: <comma-separated list of packages>
+# Replaces: <comma-separated list of packages>
+Architecture: all
+# Architecture: all
+# Copyright: <copyright file; defaults to GPL2>
+# Changelog: <changelog file; defaults to a generic changelog>
+# Readme: <README.Debian file; defaults to a generic one>
+#  <more pairs, if there's more than one file to include. Notice the starting space>
+## Extra-Files: README.Debian
+# Extra-Files: <comma-separated list of additional files for the doc directory>
+## Files: gcodis-install-local.sh /opt/gcodis/
+# Files: <pair of space-separated paths; First is file to include, second is destination>
+Description: Base package for Guifi-Community-Distro 
+ Install some base dependencies for the distro system.
