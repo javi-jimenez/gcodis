@@ -17,3 +17,5 @@ for build_pkg in `find build/packages/* -maxdepth 0 -type d`
 do
     cd $build_pkg/ ; dpkg-buildpackage -us -uc ; cd -
 done
+
+echo "Generated packages are in the build/packages/ directory."
