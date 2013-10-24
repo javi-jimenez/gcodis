@@ -533,6 +533,7 @@ esac
   copy_configuration $rootfs/.. $rootfs $hostname || exit 1
   [ $debug ] && echo "deploy_to_lxc: configure_lxc_network $rootfs/.."
   configure_lxc_network $rootfs/.. || exit 1
+  echo "INFO: The default network bridge for the container is 'lxcbr0'."
 }
 
 #### # Install gcodis itself (this is the default option)
