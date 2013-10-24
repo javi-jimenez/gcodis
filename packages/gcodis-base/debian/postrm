@@ -22,11 +22,11 @@ set -e
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
       echo "Deleting the default 'gcodis' test user. Keeping the user home directory."
-      userdel gcodis
+      userdel gcodis || echo "User not exists, not removed."
       echo "Deleting the guinux repository keys."
-      apt-key del 2E484DAB
+      apt-key del 2E484DAB || echo "Key not exists, so not removing it."
       echo "Deleting the guinux sources list file."
-      /bin/rm /etc/apt/sources.list.d/guifi.net-stable.list
+      /bin/rm /etc/apt/sources.list.d/guifi.net-stable.list || echo "File not exists, not deleting."
     ;;
 
     *)

@@ -10,6 +10,7 @@ Homepage: <insert the upstream URL, if relevant>
 
 Package: gcodis
 Architecture: all
-Depends: ${misc:Depends}
+#Depends: ${misc:Depends}
+Depends: gcodis-server, gcodis-client
 Description: <insert up to 60 chars description>
  <insert long description, indented with spaces>

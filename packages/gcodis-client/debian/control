@@ -10,7 +10,8 @@ Homepage: https://www.github.com/javi-jimenez/gcodis
 
 Package: gcodis-client
 Architecture: all
-Depends: ${misc:Depends}
+#Depends: ${misc:Depends}
+Depends: gcodis-base
 Description: Installs the gcodis-client with dependencies.
   This is a package to install gcodis client dependencies for the
   Guifi-Community-Distro software distribution.

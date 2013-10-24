@@ -34,7 +34,7 @@ do_first_installation () {
   # Main guifi.net repository key OR Alternate guifi.net repository key
   apt-key adv --keyserver pgp.mit.edu --recv-keys 2E484DAB || apt-key adv --keyserver pgp.rediris.es --recv-keys 2E484DAB
   # It's recommended to update the package list
-  apt-get -y update
+  #apt-get update
 }
 
 case "$1" in
