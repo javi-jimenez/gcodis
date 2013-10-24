@@ -522,6 +522,7 @@ esac
   mkdir -p $to #|| exit 1
   [ $debug ] && echo "deploy_to_lxc: copy_debootstrap_to_containers_path $from $to $rootfs"
   copy_debootstrap_to_containers_path $from $to $rootfs  || exit 1
+  /bin/cat /etc/resolv.conf >> $to/rootfs/etc/resolv.conf
   [ $debug ] && echo "deploy_to_lxc: install_gcodis_to_chroot $rootfs"
   install_gcodis_to_chroot $rootfs  || exit 1
   [ $debug ] && echo "deploy_to_lxc: install_extra_packages $rootfs $hostname" 
