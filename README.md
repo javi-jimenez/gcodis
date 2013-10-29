@@ -81,6 +81,15 @@ You can work with two directories: *./gcodis.git*, with a clone of this git repo
 
 To build the Guifi-Community-Distro you can clone the repository, copy or fetch directly the script, cd into the cloned directory (if cloned) and run the command: **sudo sh gcodis-create.sh**
 
+Packages
+--------
+
+Now we're testing the build of packages in the *packages/* directory, you can use the command *./gen_pkgs.sh* to try the build of packages, based on the configuration found in the *conf/* directory, where there is a cloud name called by default *gcodisdefault* as a sub-directory name and inside there are example (the default) configuration files to generate client and server packages.
+
+The distro aims to be configured using packages hooks for each provided service.
+
+The server rules the list of services and configurations, the client configures the choosen services with the server parameters.
+
 Sharing the build script
 ------------------------
 

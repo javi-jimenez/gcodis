@@ -1,5 +1,5 @@
 #!/bin/sh
-# postrm script for paqu
+# postrm script for gcodis-server-tahoe-introducer
 #
 # see: dh_installdeb(1)
 
@@ -21,19 +21,11 @@ set -e
 
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-      echo "Deleting the default 'gcodis' test user."
-      userdel gcodis || echo "User not exists, not removed."
-      if [ "$1" = "purge" ] ; then
-        echo "Purging the 'gcodis' user home directory."
-        /bin/rm -rf /home/gcodis/
-      else
-        echo "Keeping the 'gcodis' user home directory."
+      # the service is stopped automatically before this call
+      if [ "$1" = "purge" ] ; then 
+        echo "Purging 'tahoe-introducer' config dir."
+        /bin/rm -rf /home/gcodis/tahoe-introducer/
       fi
-      echo "Deleting the guinux repository keys."
-      apt-key del 2E484DAB || echo "Key not exists, so not removing it."
-      # deleted automatically as part of the package files
-      # NO: echo "Deleting the guinux sources list file."
-      # NO: /bin/rm /etc/apt/sources.list.d/guifi.net-stable.list || echo "File not exists, not deleting."
     ;;
 
     *)
