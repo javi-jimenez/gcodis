@@ -1,4 +1,4 @@
-Guifi-Community-Distro (gcodis)
+puGuifi-Community-Distro (gcodis)
 ===============================
 
 Guifi-Community-Distro
@@ -44,7 +44,7 @@ The install options for gcodis are:
 
 The `live-build` package is officially being used by the Debian project to generate ISO-Hybrid images to try the Debian system, generating images from the most basic system to systems with gnome, kde or xfce.
 
-*It has been tested on Debian unstable and Wheezy, and Ubuntu saucy*.
+*It has been tested on Debian unstable. The created ISO-Hybrid image can boot from CD/DVD or USB and install the 'gcodis' distro to a persistent media*.
 
 To try the new `live-build` method to build the image you can do: `./gcodis-live-build.sh`, the resulting images will be generated inside the *build/* directory.
 
