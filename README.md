@@ -40,6 +40,16 @@ The install options for gcodis are:
 - Debian package: *experimental*. Sources available in the 'package' directory to generate the package. To be used in the project Debian packages repositories when available. This will be the next method for the installation process.
 - `deploy_to_lxc` link to `gcodis-create.sh`: reuses a previously created bootstrap as for example with the first step of this list, and do the rest of steps as `gcodis-create.sh` does avoiding the need of creating a new debootstrap.
 
+### New build options with `live-build`
+
+The `live-build` package is officially being used by the Debian project to generate ISO-Hybrid images to try the Debian system, generating images from the most basic system to systems with gnome, kde or xfce.
+
+To try the new `live-build` method to build the image you can do: `./gcodis-live-build.sh`, the resulting images will be generated inside the *build/* directory.
+
+Based on the standard `live-build` Debian build system for live images, we'll use it to build the ISO-Hybrid images, useful to test the distro from USB or CD/DVD and we'll generate `.img` files from the generated `chroot` to be used to deploy LXC containers using for example `./deploy_to_lxc_clean gcserver build/gcodisdefault/live-build-gcodisdefault-server/chroot /var/lib/lxc/gcserver`, it will generate a new LXC container configured to boot the system and do tests.
+
+You can delete `live` packages removing the packages: `live-boot live-boot-doc live-boot-initramfs-tools live-config live-config-doc live-config-sysinit live-tools` in the resulting container if you want.
+
 Cloning LXC containers
 ----------------------
 
