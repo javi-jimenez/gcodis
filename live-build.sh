@@ -26,10 +26,11 @@ do
           --mirror-binary http://cdn.debian.net/debian/ \
 	  --security true \
 	  --backports false \
-	  --volatile false \
+	  --debian-installer live \
           --distribution wheezy \
           --architectures i386 \
 	  --mode debian
+#  --volatile false \ # in unstable doesn't exists that option
       cd -
       echo "Copying requested '$machine' packages to the build dir."
       for package in `cat $BASE_DIR/conf/$distro/$machine.packages | sort -u`
