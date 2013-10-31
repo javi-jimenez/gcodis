@@ -1,6 +1,9 @@
 #!/bin/sh
 # Generate packages from source, usually in $git/packages/
 
+echo "First check the requirements, we need to build the gcodis packages a Debian (or related system) and the next packages: dpkg-dev debhelper. Press [Enter] to continue or [CTRL+C] if not."
+read continue
+
 # Packages to compile recopilation
 for cloud in `find conf/* -maxdepth 0 -type d`
 do 

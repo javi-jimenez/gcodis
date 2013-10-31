@@ -2,7 +2,7 @@
 # Generate ISO-Hybrid images and local LXC deployment of the
 # conf/*/server and conf/*/client elements, one for each
 
-echo "First check the requirements, we need to build gcodis with 'live-build' a Debian (or related system) and the next packages: live-build dpkg-dev debhelper. Press [Enter] to continue or [CTRL+C] if not."
+echo "First check the requirements, we need to build gcodis with 'live-build' a Debian (or related system) and the next packages: live-build. Press [Enter] to continue or [CTRL+C] if not."
 read continue
 
 if [ -d "build/" ] ; then
