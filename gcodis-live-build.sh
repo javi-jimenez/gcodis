@@ -7,8 +7,9 @@ read continue
 
 if [ -d "build/" ] ; then
   # clean build?
-  echo "Clean build/ dirctory?"
-  rm -r -i build/
+  echo "Clean build/ directory? Press [enter] to clean it and [CTRL+C] if not."
+  read clean
+  rm -rf build/
 else
   mkdir build/
 fi
