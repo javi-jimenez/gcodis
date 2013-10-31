@@ -36,6 +36,7 @@ do
 #$ lb config --architectures i386 --linux-flavours 486 \
 #         --debian-installer live
 #$ echo debian-installer-launcher >> config/package-lists/my.list.chroot
+      echo "$0: Adding debian-installer-launcher to packages to be installed. GUI install for gcodis."
       echo debian-installer-launcher >> $BASE_DIR/build/$distro/live-build-$distro-$machine/config/package-lists/di-launcher.chroot
       cd -
       echo "Copying requested '$machine' packages to the build dir."
