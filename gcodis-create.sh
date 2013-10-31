@@ -536,6 +536,96 @@ esac
   echo "INFO: The default network bridge for the container is 'lxcbr0'."
 }
 
+
+
+
+
+
+
+
+
+
+# deploys to lxc but not install anything inside it
+deploy_to_lxc_clean () {
+
+    # debug
+    debug=1
+
+hostname="$1"
+from="$2/"
+to="$3/"
+
+
+# default values
+case $# in
+  1)
+    # redefined hostname in command line
+    from=/debootstrap-i386-wheezy-rootfs/
+    to=/var/lib/lxc/$hostname/
+  ;;
+  2)
+    # redefined hostname in command line
+    # redefined from     in command line
+    to=/var/lib/lxc/$1/
+  ;;
+  3)
+    # redefined hostname in command line
+    # redefined from     in command line
+    # redefined to       in command line
+    # ok, all redefined
+  ;;
+  *)
+    echo "Usage: $0 hostname [from [to]]"
+    echo "Parameters:"
+    echo "  - hostname: the hostname for the deployed LXC container (if only this parameter is present, will be deployed by default from /debootstrap-i386-wheezy-rootfs/ to /var/lib/lxc/hostname)"
+    echo "  - from: path for the already generated debootstrap to be deployed (if only 'hostname' and 'from' parameters are present, the default is to deploy the 'from' directory to /var/lib/lxc/hostname)"
+    echo "  - to: where to deploy the LXC container. The debootstrap directory 'from' will be deployed as a Linux Container in the given 'to' directory with the container name as 'hostname'."
+    exit 1
+  ;;
+esac
+
+  rootfs="$to/rootfs/"
+
+  # debug
+  if [ $debug ] ; then echo "deploy_to_lxc: hostname=$hostname from=$from to=$to rootfs=$rootfs" ; fi
+
+
+
+  # main
+  # TODO
+  [ $debug ] && echo "deploy_to_lxc: mkdir -p $to"
+  mkdir -p $to #|| exit 1
+  [ $debug ] && echo "deploy_to_lxc: copy_debootstrap_to_containers_path $from $to $rootfs"
+  copy_debootstrap_to_containers_path $from $to $rootfs  || exit 1
+/bin/cat /etc/resolv.conf >> $to/rootfs/etc/resolv.conf
+#  [ $debug ] && echo "deploy_to_lxc: install_gcodis_to_chroot $rootfs"
+#  install_gcodis_to_chroot $rootfs  || exit 1
+#  [ $debug ] && echo "deploy_to_lxc: install_extra_packages $rootfs $hostname" 
+#  install_extra_packages $rootfs $hostname  || exit 1
+  [ $debug ] && echo "deploy_to_lxc: configure_debian $rootfs $hostname"
+  configure_debian $rootfs $hostname || exit 1
+  [ $debug ] && echo "deploy_to_lxc: copy_configuration $rootfs/.. $rootfs $hostname"
+  copy_configuration $rootfs/.. $rootfs $hostname || exit 1
+  [ $debug ] && echo "deploy_to_lxc: configure_lxc_network $rootfs/.."
+  configure_lxc_network $rootfs/.. || exit 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #### # Install gcodis itself (this is the default option)
 
 # Simply install gcodis locally Debian Wheezy (at least)
