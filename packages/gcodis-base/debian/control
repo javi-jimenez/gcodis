@@ -12,7 +12,7 @@ Standards-Version: 3.9.2
 Package: gcodis-base
 #Package: <package name; defaults to equivs-dummy>
 # Version: <enter version here; defaults to 1.0>
-Version: 0.1
+#Version: 0.1
 # Maintainer: Your Name <yourname@example.com>
 # Pre-Depends: <comma-separated list of packages>
 Depends: avahi-utils, avahi-daemon, avahi-autoipd, dbus-x11, geoip-bin, openvpn, iputils-ping, vim, nano, openssh-server
