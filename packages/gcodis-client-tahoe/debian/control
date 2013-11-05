@@ -1,0 +1,16 @@
+Source: gcodis-client-tahoe
+Section: unknown
+Priority: extra
+Maintainer: Javi Jiménez (guifi.net Foundation) <javi.jimenez@guifi.net>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+#Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://git.debian.org/collab-maint/gcodis-client-tahoe.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/gcodis-client-tahoe.git;a=summary
+
+Package: gcodis-client-tahoe
+Architecture: all
+Depends: gcodis-base, tahoe-lafs
+Description: gcodis Tahoe-LAFS generic client
+ This is the gcodis Tahoe-LAFS generic client, 
+ can be a client or a client and storage at the same time.
