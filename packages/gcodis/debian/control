@@ -12,5 +12,6 @@ Package: gcodis
 Architecture: all
 #Depends: ${misc:Depends}
 Depends: gcodis-server, gcodis-client
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Description: gcodis Guifi-Community-Distro metapackage
+ This metapackage install the server and client parts of
+ the Guifi-Community-Distro Debian based software distribution.
