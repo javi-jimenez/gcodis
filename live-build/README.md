@@ -1,7 +1,9 @@
 gcodis distro compilations
 ==========================
 
-Here there are different distro compilations, prepared to build an ISO-Hybrid at least.
+We base our compilations in the `live-build` Debian GNU/Linux system build tool.
 
-chdir into directories and do `lb build` to begin and generate ISO-Hybrid images.
+Here there are different distro compilations, prepared to build an ISO-Hybridi, .IMG and LXC local containers.
+
+chdir into each one of the directories and do `lb build` to begin and generate that compilation.
 

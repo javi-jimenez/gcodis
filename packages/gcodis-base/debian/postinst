@@ -25,7 +25,8 @@ do_first_installation () {
   echo "Adding the default user 'gcodis'."
   # OLD, not secure: useradd -m -p '$1$3t9p0CkT$m.q5K2Nm9NuyiEZIwa./F/' -s /bin/bash -d /home/gcodis gcodis
   # Locked password user at the moment. Development.
-  useradd -m -s /bin/bash -d /home/gcodis gcodis
+  # useradd -m -s /bin/bash -d /home/gcodis gcodis
+  useradd -m -s /bin/bash -d /home/gcodis gcodis ; echo -n 'gcodis:gcodis' | chpasswd ; passwd -e gcodis
   # guifi.net guinux software repository
   # DONE: put as file
   # echo "Adding the file '/etc/apt/sources.list.d/guifi.net-stable.list' to the system sources.list for the guifi.net guinux repository."

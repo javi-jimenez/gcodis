@@ -10,46 +10,36 @@ fi
 cd $DIR
 BASE_DIR=`pwd`
 
+builds=`cd $BASE_DIR/live-build/ ; find . -maxdepth 1 -type d | cut -f 2 -d '/' | grep -v '^\.'`
 
-#for distro in `find conf/ -type d --max-depth 1`
-for distro in `cd $BASE_DIR/conf ; find * -maxdepth 1 -type d | cut -f 2 -d '/'`
+for build in $builds
 do
-  cd $BASE_DIR
-  echo "Distro $distro found in $BASE_DIR/conf/$distro/"
-    for machine in "server" "client"
-    do
-      echo "Build $machine"
-      mkdir -p $BASE_DIR/build/$distro/live-build-$distro-$machine/
-      echo "Configuring live-build for $machine"
-      cd "$BASE_DIR/build/$distro/live-build-$distro-$machine/"
-      lb config --mirror-bootstrap http://cdn.debian.net/debian/ \
-          --mirror-binary http://cdn.debian.net/debian/ \
-	  --security true \
-	  --backports false \
-	  --debian-installer live \
-          --distribution wheezy \
-          --architectures i386 \
-	  --mode debian
-#  --volatile false \ # in unstable doesn't exists that option
-# Source: http://live.debian.net/manual/3.x/html/live-manual.en.html
-# If you want a desktop debian installer do:
-#$ lb config --architectures i386 --linux-flavours 486 \
-#         --debian-installer live
-#$ echo debian-installer-launcher >> config/package-lists/my.list.chroot
-      echo "$0: Adding debian-installer-launcher to packages to be installed. GUI install for gcodis."
-      echo debian-installer-launcher >> $BASE_DIR/build/$distro/live-build-$distro-$machine/config/package-lists/di-launcher.chroot
-      cd -
-      echo "Copying requested '$machine' packages to the build dir."
-      for package in `cat $BASE_DIR/conf/$distro/$machine.packages | sort -u`
-      do
-	  cp -v $BASE_DIR/build/packages/$package*.deb $BASE_DIR/build/$distro/live-build-$distro-$machine/config/packages.chroot/
-      done
-      echo "Building the $distro $machine with live-build."
-      cd $BASE_DIR/build/$distro/live-build-$distro-$machine/
-      echo "live-build.sh: in `pwd` doing 'lb build' for $machine of $distro"
-      #      lb bootstrap
-      #      lb chroot
-      lb build
-      cd -
-    done
+  cd $BASE_DIR/live-build/$build
+
+  # Build bootstrap
+  echo "Build '$build' found in $BASE_DIR/live-build/$build/"
+  echo "`pwd` $BASE_DIR/006_gen_bootstrap.sh"
+  $BASE_DIR/006_gen_bootstrap.sh
+  # It works!
+
+  # Build chroot
+  echo "`pwd` $BASE_DIR/008_gen_chroot.sh"
+  $BASE_DIR/008_gen_chroot.sh
+  # It works!
+
+  # Build ISO-Hybrid live and installing for CD/DVD, HD and USB
+  echo "`pwd` $BASE_DIR/040_gen_iso.sh"
+  $BASE_DIR/040_gen_iso.sh
+
+  cd $BASE_DIR/live-build/$build/binary/live/
+  echo "`pwd` $BASE_DIR/070_gen_img.sh filesystem.squashfs"
+  echo "`pwd` $BASE_DIR/070_gen_img.sh filesystem.squashfs"
+
+  echo "`pwd` $BASE_DIR/060_gen_lxc.sh $BASE_DIR/live-build/$build/binary/live/squashfs-root/"
+  echo "`pwd` $BASE_DIR/060_gen_lxc.sh $BASE_DIR/live-build/$build/binary/live/squashfs-root/"
+
+  cd -
 done
+
+cd $BASE_DIR
+
