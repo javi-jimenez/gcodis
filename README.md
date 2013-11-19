@@ -27,11 +27,31 @@ Apart from the standard services, initially the project offers two services:
 
 - Avahi
 - Tahoe-LAFS
+- OwnCloud
 
-**The project is based on the Avahi Zeroconf implementation.**
+**The project is based on the Avahi Zeroconf implementation. Reachable in the broadcast domain or publishing the services to DNS servers.**
 
 Install options
 ---------------
+
+We use the `live-build` method for building the distro and generate ISO-Hybrid (for CD/DVD and USB, it's a live system), chroot, squashfs, and LXC containers.
+
+The install options now are from:
+- The repository [gcodis-repo] as usual using Debian packages and `apt-get`.
+- ISO (CD/DVD or USB): 'toast' the ISO to a CD/DVD or USB pen.
+- Script to run from inside a existing Wheezy. WIP (Work In Progress).
+
+[gcodis-repo]: http://repo.clommunity-project.eu
+
+Pre-installed systems:
+- LXC: Deployed automatically when built. Can be cloned or exported.
+- IMG: Run directly from 'kvm'. 
+- VirtualBox: WIP.
+
+
+### Legacy installation options
+
+These installation using `gcodis-create.sh` options is the legacy method of installation, we don't use it directly, but we reuse some of the components of the script, now we use the `live-build` method for building the system.
 
 The install options for gcodis are:
 
@@ -44,17 +64,26 @@ The install options for gcodis are:
 
 The `live-build` package is officially being used by the Debian project to generate ISO-Hybrid images to try the Debian system, generating images from the most basic system to systems with gnome, kde or xfce.
 
-*It has been tested on Debian unstable. The created ISO-Hybrid image can boot from CD/DVD or USB and install the 'gcodis' distro to a persistent media*.
+*It has been tested on Debian Wheezy. The created ISO-Hybrid image can boot from CD/DVD or USB and install the 'gcodis' distro to a persistent media or create a persistent partition to store the data while using the live medium*.
 
-To try the new `live-build` method to build the image you can do: `./gcodis-live-build.sh`, the resulting images will be generated inside the *build/* directory.
+To build with the new `live-build` method to build the image you can do: `make`, the resulting images will be generated inside the *live-build/* directory. We at the moment generate images for desktop *live-build/desktop/*, client *live-build/client/*, and server *live-build/server/*.
 
 Based on the standard `live-build` Debian build system for live images, we'll use it to build the ISO-Hybrid images, useful to test the distro from USB or CD/DVD. You can *toast* the image to a CD/DVD with the appropriate program or directly to an USB pen with the `dd` command to test the distro and install to hard disk after booting from each one of those medium if you want.
 
-We'll generate bootable `.img` disk image files from the generated *chroot*. 
+We generate bootable `.img` disk images files from the generated *squashfs*, *chroot/* dir contains too live system packages for building live systems.
 
 Now we can deploy LXC containers using for example the command `./deploy_to_lxc_clean gcserver build/gcodisdefault/live-build-gcodisdefault-server/chroot /var/lib/lxc/gcserver`, it will generate a new LXC container configured to boot the system and do tests.
 
 You can delete `live` packages removing the packages: `live-boot live-boot-doc live-boot-initramfs-tools live-config live-config-doc live-config-sysinit live-tools` in the resulting container if you want.
+
+#### The resulting compilations
+
+As a result of the `make` build process the results are:
+- *live chroot*: `live-build/*/chroot/`
+- *bare chroot squashfs*: `live-build/*/binary/live/filesystem.squashfs`
+- *live ISO*: `live-build/*/binary.hybrid.iso`
+- *bootable .IMG*: `live-build/*/binary/live/gcodis.img`
+- *LXC container deployed*: `/var/lib/lxc/gcodis-xxxx`, where `xxxx` is a random string.
 
 Cloning LXC containers
 ----------------------
