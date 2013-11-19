@@ -85,6 +85,39 @@ As a result of the `make` build process the results are:
 - *bootable .IMG*: `live-build/*/binary/live/gcodis.img`
 - *LXC container deployed*: `/var/lib/lxc/gcodis-xxxx`, where `xxxx` is a random string.
 
+Build 
+-----
+
+Packages and `live-build` system now are independent.
+
+### Packages
+
+Developing packages is independent of building images now.
+
+Packages are in the `./packages/` directory.
+
+To generate the packages do:
+
+  ./gen_pkgs.sh
+
+### Images and `live-build`
+
+To build the all the images using the `live-build` system you can do:
+
+  make
+
+`live-build` configurations are in the `./live-build/` directory, you can go inside each compilation, for example `cd ./live-build/desktop/` for building the desktop compilation and run:
+
+  lb build
+
+If you want to *clean* the compilation results to begin again the process you can write:
+ 
+  lb clean
+
+#### Dependencies
+
+  apt-get install live-build squashfs-tools
+
 Cloning LXC containers
 ----------------------
 
