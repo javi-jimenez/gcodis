@@ -15,7 +15,7 @@ Package: gcodis-base
 #Version: 0.1
 # Maintainer: Your Name <yourname@example.com>
 # Pre-Depends: <comma-separated list of packages>
-Depends: avahi-utils, avahi-daemon, avahi-autoipd, dbus-x11, geoip-bin, openvpn, iputils-ping, vim, nano, openssh-server
+Depends: avahi-utils, avahi-daemon, avahi-autoipd, dbus-x11, geoip-bin, openvpn, iputils-ping, vim, nano, openssh-server, owncloud
 # Depends: <comma-separated list of packages>
 # Recommends: <comma-separated list of packages>
 # Suggests: <comma-separated list of packages>
