@@ -13,7 +13,10 @@ if [ $# -eq 2 ] ; then
   img_size=$2
 else
   chroot_size=`du -s $1/ | cut -f 1`
-  img_size_increment=$(( $chroot_size * 0,2  ))
+  # Add 20% of space
+  img_size_increment=`awk "BEGIN { printf ( $chroot_size  * 0.2) }" | awk '{ printf ("%d", $1)}'`
+  # Put upper limit as 2GiB?
+  if [ $img_size_increment -gt 2000000 ] ; then $img_size_increment=2000000 ; fi
   img_size=$(( $chroot_size + $img_size_increment ))
 fi
 
