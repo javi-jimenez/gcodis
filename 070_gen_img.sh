@@ -14,13 +14,11 @@ else
 fi
 # cd into $DIR and all script calls are local to the script path
 
-[ -f $DIR/grub-template.cfg ] && echo "OK, template exists"
-
-#  cd $build/binary/live/
-#  $DIR/mkimg.sh filesystem.squashfs
-#  cd ..
+[ ! -f $DIR/grub-template.cfg ] && echo "Template $DIR/grub-template.cfg not exists, can't continue."
 
 [ $# -eq 0 ] && echo "Usage: $0 live-build/server/binary/live/filesystem.squashfs" && exit 1
 
-$DIR/mkimg.sh $1
+echo "$DIR/mkimg.sh $*"
+
+$DIR/mkimg.sh $*
 
