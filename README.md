@@ -116,7 +116,7 @@ If you want to *clean* the compilation results to begin again the process you ca
 
 #### Dependencies
 
-  apt-get install live-build squashfs-tools
+  apt-get install live-build squashfs-tools virtualbox pwgen
 
 Cloning LXC containers
 ----------------------
