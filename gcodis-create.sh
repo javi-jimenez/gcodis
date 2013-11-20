@@ -595,18 +595,19 @@ esac
   # TODO
   [ $debug ] && echo "deploy_to_lxc: mkdir -p $to"
   mkdir -p $to #|| exit 1
-  [ $debug ] && echo "deploy_to_lxc: copy_debootstrap_to_containers_path $from $to $rootfs"
+  [ $debug ] && echo "deploy_to_lxc_clean: copy_debootstrap_to_containers_path $from $to $rootfs"
   copy_debootstrap_to_containers_path $from $to $rootfs  || exit 1
+# patch for local resolv.conf
 /bin/cat /etc/resolv.conf >> $to/rootfs/etc/resolv.conf
-#  [ $debug ] && echo "deploy_to_lxc: install_gcodis_to_chroot $rootfs"
+#  [ $debug ] && echo "deploy_to_lxc_clean: install_gcodis_to_chroot $rootfs"
 #  install_gcodis_to_chroot $rootfs  || exit 1
-#  [ $debug ] && echo "deploy_to_lxc: install_extra_packages $rootfs $hostname" 
+#  [ $debug ] && echo "deploy_to_lxc_clean: install_extra_packages $rootfs $hostname" 
 #  install_extra_packages $rootfs $hostname  || exit 1
-  [ $debug ] && echo "deploy_to_lxc: configure_debian $rootfs $hostname"
+  [ $debug ] && echo "deploy_to_lxc_clean: configure_debian $rootfs $hostname"
   configure_debian $rootfs $hostname || exit 1
-  [ $debug ] && echo "deploy_to_lxc: copy_configuration $rootfs/.. $rootfs $hostname"
+  [ $debug ] && echo "deploy_to_lxc_clean: copy_configuration $rootfs/.. $rootfs $hostname"
   copy_configuration $rootfs/.. $rootfs $hostname || exit 1
-  [ $debug ] && echo "deploy_to_lxc: configure_lxc_network $rootfs/.."
+  [ $debug ] && echo "deploy_to_lxc_clean: configure_lxc_network $rootfs/.."
   configure_lxc_network $rootfs/.. || exit 1
   
   chroot $rootfs/ dpkg-reconfigure openssh-server
