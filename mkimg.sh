@@ -1,33 +1,45 @@
 #!/bin/sh
-# Creates .img GRUB bootable images from live-build squashfs generated file.
+# Creates .img GRUB bootable images from a given directory
 
 # Source: http://roscopeco.com/2013/08/12/creating-a-bootable-hard-disk-image-with-grub2/
 
-[ $# -eq 0 ] && echo "Usage: $0 [filesystem.squashfs]" && exit 1
+[ $# -eq 0 ] && echo "Usage: $0 <directory> [size]" && exit 1
 
-#cd binary/live/
-unsquashfs $1 # filesystem.squashfs
+[ $# -eq 1 ] && echo "Creating image for the directory $1"
 
-img_name="gcodis.img"
+[ ! -d $1 ] && echo "Directory '$1' doesn't exists. Exiting." && exit 1
 
-# dd if=/dev/zero of=mink.img count=10000 bs=1048576
-dd if=/dev/zero of=$img_name count=2000 bs=1048576
-# parted --script mink.img mklabel msdos mkpart p ext2 1 10000 set 1 boot on
-parted --script $img_name mklabel msdos mkpart p ext4 1 2000 set 1 boot on
+if [ $# -eq 2 ] ; then
+  img_size=$2
+else
+  chroot_size=`du -s $1/ | cut -f 1`
+  img_size_increment=$(( $chroot_size * 0,2  ))
+  img_size=$(( $chroot_size + $img_size_increment ))
+fi
+
+img_name=`basename $1`
+img_name="$img_name.img"
+
+echo "Creating $img_name with size $img_size"
+
+dd if=/dev/zero of=$img_name count=$img_size bs=1k
+parted --align optimal --script $img_name unit kB mklabel msdos mkpart p ext4 200 $img_size set 1 boot on
 kpartx -a $img_name
-sleep 1
+while [ ! -L /dev/mapper/loop0p1 ]; do sleep 1 ; done
 mkfs.ext4 /dev/mapper/loop0p1
+echo "mkdir -p build/tmp/p1"
 mkdir -p build/tmp/p1
 mount -o loop /dev/mapper/loop0p1 build/tmp/p1
-#cp -r squashfs-root/* build/tmp/p1
-cd squashfs-root/ ; cp -dpa * ../build/tmp/p1 ; cd ..
+cd $1/ ; cp -dpa * ../build/tmp/p1 ; cd ..
+echo 'echo "(hd0) /dev/loop0" > build/tmp/device.map'
 echo "(hd0) /dev/loop0" > build/tmp/device.map
 #grub2-install --no-floppy                                                      \
 #              --grub-mkdevicemap=build/tmp/device.map                          \
 #              --modules="biosdisk part_msdos ext4 configfile normal multiboot" \
 #              --root-directory=build/tmp/p1                                    \
 #              /dev/loop0
-grub-install --no-floppy --modules="biosdisk part_msdos ext2 configfile normal multiboot" --root-directory=build/tmp/p1  /dev/loop0
+echo "grub-install --no-floppy --modules="biosdisk part_msdos ext2 configfile normal multiboot" --root-directory=build/tmp/p1  /dev/loop0"
+grub-install --no-floppy --recheck --modules="biosdisk part_msdos ext2 configfile normal multiboot" --root-directory=build/tmp/p1 /dev/loop0
 
 # Base dir for the call
 # Source: http://stackoverflow.com/questions/920755/how-to-get-script-file-path-inside-script-itself-when-called-through-sym-link
@@ -44,5 +56,6 @@ uuid=`blkid /dev/mapper/loop0p1 | cut -f 2 -d " " | cut -f 2 -d "=" | sed "s/\"/
 sed "s/UUID-GOES-HERE/$uuid/g" $DIR/grub-template.cfg > build/tmp/p1/boot/grub/grub.cfg
 
 umount build/tmp/p1
+echo "kpartx -d $img_name"
 kpartx -d $img_name
 

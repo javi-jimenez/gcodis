@@ -18,27 +18,43 @@ do
 
   # Build bootstrap
   echo "Build '$build' found in $BASE_DIR/live-build/$build/"
-  echo "`pwd` $BASE_DIR/006_gen_bootstrap.sh"
+  echo "From `pwd`: $BASE_DIR/006_gen_bootstrap.sh"
   $BASE_DIR/006_gen_bootstrap.sh
   # It works!
 
   # Build chroot
-  echo "`pwd` $BASE_DIR/008_gen_chroot.sh"
+  echo "From `pwd`: $BASE_DIR/008_gen_chroot.sh"
   $BASE_DIR/008_gen_chroot.sh
   # It works!
 
   # Build ISO-Hybrid live and installing for CD/DVD, HD and USB
-  echo "`pwd` $BASE_DIR/040_gen_iso.sh"
+  echo "From `pwd`: $BASE_DIR/040_gen_iso.sh"
   $BASE_DIR/040_gen_iso.sh
 
+  echo "From `pwd`: $BASE_DIR/070_gen_img.sh squashfs-root/"
   cd $BASE_DIR/live-build/$build/binary/live/
-  echo "`pwd` $BASE_DIR/070_gen_img.sh filesystem.squashfs"
-  echo "`pwd` $BASE_DIR/070_gen_img.sh filesystem.squashfs"
-
-  echo "`pwd` $BASE_DIR/060_gen_lxc.sh $BASE_DIR/live-build/$build/binary/live/squashfs-root/"
-  echo "`pwd` $BASE_DIR/060_gen_lxc.sh $BASE_DIR/live-build/$build/binary/live/squashfs-root/"
-
+  unsquashfs filesystem.squashfs
+  chroot_size=`du -s squashfs-root | cut -f 1`
+  # Add 1,2GiB to the total size for Tahoe-LAFS
+  img_size=$(($chroot_size + 120000))
+  echo "basename($0): $BASE_DIR/070_gen_img.sh squashfs-root $img_size"
+  $BASE_DIR/070_gen_img.sh squashfs-root $img_size
   cd -
+  # It works!
+
+  echo "Running: VBoxManage convertfromraw squashfs-root.img squashfs-root.vdi. Can fail if VirtualBox is not installed."
+  cd $BASE_DIR/live-build/$build/binary/live/
+  # $BASE_DIR/080_gen_vdi.sh squashfs-root.img
+  VBoxManage convertfromraw squashfs-root.img squashfs-root.vdi
+  cd -
+  # It works!
+
+  echo "`pwd` $BASE_DIR/060_gen_lxc.sh $BASE_DIR/live-build/$build/binary/live/squashfs-root/"
+  $BASE_DIR/060_gen_lxc.sh $BASE_DIR/live-build/$build/binary/live/squashfs-root/
+  # It works!
+
+  # Rename images?
+
 done
 
 cd $BASE_DIR
