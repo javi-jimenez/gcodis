@@ -23,16 +23,21 @@ fi
 img_name=`basename $1`
 img_name="$img_name.img"
 
-echo "Creating $img_name with size $img_size"
-
+echo "Creating $img_name file with size $img_size"
 dd if=/dev/zero of=$img_name count=$img_size bs=1k
+echo "Creating partitions inside the image file"
 parted --align optimal --script $img_name unit kB mklabel msdos mkpart p ext4 200 $img_size set 1 boot on
+echo "Link partitions in image file to filesystem"
 kpartx -a $img_name
+echo "Wait for partitions being visible"
 while [ ! -L /dev/mapper/loop0p1 ]; do sleep 1 ; done
+echo "Create ext4 file system in the partition inside the file"
 mkfs.ext4 /dev/mapper/loop0p1
 echo "mkdir -p build/tmp/p1"
 mkdir -p build/tmp/p1
+echo "Mounting the partition in the file system"
 mount -o loop /dev/mapper/loop0p1 build/tmp/p1
+echo "Copying the files to the mounted partition"
 cd $1/ ; cp -dpa * ../build/tmp/p1 ; cd ..
 echo 'echo "(hd0) /dev/loop0" > build/tmp/device.map'
 echo "(hd0) /dev/loop0" > build/tmp/device.map
@@ -41,7 +46,7 @@ echo "(hd0) /dev/loop0" > build/tmp/device.map
 #              --modules="biosdisk part_msdos ext4 configfile normal multiboot" \
 #              --root-directory=build/tmp/p1                                    \
 #              /dev/loop0
-echo "grub-install --no-floppy --modules="biosdisk part_msdos ext2 configfile normal multiboot" --root-directory=build/tmp/p1  /dev/loop0"
+echo "Installing GRUB inside the partition in the file: grub-install --no-floppy --modules="biosdisk part_msdos ext2 configfile normal multiboot" --root-directory=build/tmp/p1  /dev/loop0"
 grub-install --no-floppy --recheck --modules="biosdisk part_msdos ext2 configfile normal multiboot" --root-directory=build/tmp/p1 /dev/loop0
 
 # Base dir for the call
@@ -54,11 +59,16 @@ fi
 # cd into $DIR and all script calls are local to the script path
 [ -f $DIR/grub-template.cfg ] && echo "OK, template exists"
 
-# New
+echo "Creating grub.cfg from template adding the partition data"
 uuid=`blkid /dev/mapper/loop0p1 | cut -f 2 -d " " | cut -f 2 -d "=" | sed "s/\"//g"`
 sed "s/UUID-GOES-HERE/$uuid/g" $DIR/grub-template.cfg > build/tmp/p1/boot/grub/grub.cfg
 
+echo "Unmounting partition"
 umount build/tmp/p1
-echo "kpartx -d $img_name"
+echo "Un-linking partitions from file system: kpartx -d $img_name"
 kpartx -d $img_name
+
+echo "All done!"
+
+echo "Created image is '$img_name'"
 
