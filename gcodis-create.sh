@@ -287,9 +287,9 @@ copy_debootstrap_to_containers_path () {
   to=$2
   rootfs=$3
 
-  mkdir $to
-  mkdir $rootfs
-  cp -dpa $from/* $rootfs/
+  [ ! -d $to ] && echo "Creating directory '$to'" && mkdir $to
+  [ ! -d $rootfs ] && echo "Creating directory '$rootfs'" && mkdir $rootfs
+  /bin/cp -dpa $from/* $rootfs/
 }
 
 # Install extra packages
