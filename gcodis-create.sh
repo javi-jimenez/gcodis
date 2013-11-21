@@ -587,13 +587,13 @@ esac
   rootfs="$to/rootfs/"
 
   # debug
-  if [ $debug ] ; then echo "deploy_to_lxc: hostname=$hostname from=$from to=$to rootfs=$rootfs" ; fi
+  if [ $debug ] ; then echo "deploy_to_lxc_clean: hostname=$hostname from=$from to=$to rootfs=$rootfs" ; fi
 
 
 
   # main
   # TODO
-  [ $debug ] && echo "deploy_to_lxc: mkdir -p $to"
+  [ $debug ] && echo "deploy_to_lxc_clean: mkdir -p $to"
   mkdir -p $to #|| exit 1
   [ $debug ] && echo "deploy_to_lxc_clean: copy_debootstrap_to_containers_path $from $to $rootfs"
   copy_debootstrap_to_containers_path $from $to $rootfs  || exit 1
