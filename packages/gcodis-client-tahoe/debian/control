@@ -14,3 +14,6 @@ Depends: gcodis-base, tahoe-lafs
 Description: gcodis Tahoe-LAFS generic client
  This is the gcodis Tahoe-LAFS generic client, 
  can be a client or a client and storage at the same time.
+ . 
+ As a client, uses Introducers, by that, this package
+ manages the list of Introducers and directories for them.
