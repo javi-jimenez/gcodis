@@ -1,0 +1,8 @@
+gcodis-tor-bridge for Debian
+----------------------------
+
+The package depends on Tor.
+
+Install it to install Tor and to create a bridge between a network and Tor public relays.
+
+ -- Javi Jiménez (guifi.net Foundation) <javi.jimenez@guifi.net>  Mon, 25 Nov 2013 12:09:19 +0100
