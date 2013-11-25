@@ -1,3 +1,9 @@
+gcodis-tor-bridge (0.1.1) unstable; urgency=low
+
+  * More documentation to package in README.Debian
+
+ -- - <us01@ubuntu>  Mon, 25 Nov 2013 14:42:50 +0100
+
 gcodis-tor-bridge (0.1) unstable; urgency=low
 
   * Initial Release.
