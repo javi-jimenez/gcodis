@@ -1,0 +1,1 @@
+echo "gcodis	ALL=(ALL:ALL) ALL" >> /etc/sudoers

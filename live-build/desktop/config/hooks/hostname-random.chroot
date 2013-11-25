@@ -1,0 +1,1 @@
+echo "gcodis-client-"`pwgen -1` > /etc/hostname
