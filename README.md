@@ -39,15 +39,14 @@ We use the `live-build` method for building the distro and generate ISO-Hybrid (
 The install options now are from:
 - The repository [gcodis-repo] as usual using Debian packages and `apt-get`.
 - ISO (CD/DVD or USB): 'toast' the ISO to a CD/DVD or USB pen.
-- Script to run from inside a existing Wheezy. WIP (Work In Progress).
+- Script to run from inside an existing Wheezy. WIP (Work In Progress).
 
 [gcodis-repo]: http://repo.clommunity-project.eu
 
 Pre-installed systems:
 - LXC: Deployed automatically when built. Can be cloned or exported.
 - IMG: Run directly from 'kvm'. 
-- VirtualBox: WIP.
-
+- VDI: For use with VirtualBox.
 
 ### Legacy installation options
 
@@ -61,6 +60,8 @@ The install options for gcodis are:
 - `deploy_to_lxc` link to `gcodis-create.sh`: reuses a previously created bootstrap as for example with the first step of this list, and do the rest of steps as `gcodis-create.sh` does avoiding the need of creating a new debootstrap.
 
 ### New build options with `live-build`
+
+For an easy and complete build simply run `make` from the cloned system as root.
 
 The `live-build` package is officially being used by the Debian project to generate ISO-Hybrid images to try the Debian system, generating images from the most basic system to systems with gnome, kde or xfce.
 
@@ -99,6 +100,10 @@ Packages are in the `./packages/` directory.
 To generate the packages do:
 
   ./gen_pkgs.sh
+
+#### Dependencies
+
+  apt-get install devscripts dh-make
 
 ### Images and `live-build`
 
