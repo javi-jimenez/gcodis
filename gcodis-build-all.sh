@@ -35,8 +35,8 @@ do
   cd $BASE_DIR/live-build/$build/binary/live/
   unsquashfs filesystem.squashfs
   chroot_size=`du -s squashfs-root | cut -f 1`
-  # Add 1,2GiB to the total size for Tahoe-LAFS
-  img_size=$(($chroot_size + 120000))
+  # Add 2 GiB to the total size for Tahoe-LAFS
+  img_size=$(($chroot_size + 2000000))
   echo "basename($0): $BASE_DIR/070_gen_img.sh squashfs-root $img_size"
   $BASE_DIR/070_gen_img.sh squashfs-root $img_size
   cd -
