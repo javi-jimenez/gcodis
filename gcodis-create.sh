@@ -251,6 +251,7 @@ create_debootstrap () {
     TARGET="/debootstrap-$ARCH-$BRANCH-rootfs"
     # can be a local media ?
     PACKAGES_URL=http://cdn.debian.net/debian
+
     
     # Check existence of previous build at $TARGET
     # Reuse the debootstrap chroot directory
@@ -614,8 +615,28 @@ esac
   
 }
 
+# Creates a Debian LXC container
+lxc_create_debian () {
+  name=$1
+
+  [ $# -eq 0 ] && name=`pwgen -1`
+
+  # TODO: gcodis_cache="$HOME/gcodis-cache/"
 
 
+  # do default deployment
+  checkinstall_debootstrap_requirements
+  # Creates a Debian chroot using debootstrap
+  create_debootstrap 
+  # default deployment to LXC, could use mktemp or similar
+  # Deploys the Debian chroot to a LXC container
+  # TODO:- checkinstall_lxc_requirements -> 'lxc' or 'lxc-start'
+  # deploy_to_lxc hostname from to
+  deploy_to_lxc_clean $name /debootstrap-i386-wheezy-rootfs/ /var/lib/lxc/$name/
+
+  echo "LXC Debian container $name has been created and deployed in /var/lib/lxc/$name"
+
+}
 
 
 
