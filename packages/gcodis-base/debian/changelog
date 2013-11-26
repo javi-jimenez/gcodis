@@ -1,3 +1,9 @@
+gcodis-base (0.1.3) unstable; urgency=low
+
+  * Owncloud now can be installed.
+
+ -- Javi Jiménez <javi.jimenez@guifi.net>  Tue, 26 Nov 2013 11:35:05 +0100
+
 gcodis-base (0.1.2) unstable; urgency=high
 
   * Dependency.
