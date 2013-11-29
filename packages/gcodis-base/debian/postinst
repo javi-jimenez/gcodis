@@ -26,7 +26,14 @@ do_first_installation () {
   # OLD, not secure: useradd -m -p '$1$3t9p0CkT$m.q5K2Nm9NuyiEZIwa./F/' -s /bin/bash -d /home/gcodis gcodis
   # Locked password user at the moment. Development.
   # useradd -m -s /bin/bash -d /home/gcodis gcodis
-  useradd -m -s /bin/bash -d /home/gcodis gcodis ; echo -n 'gcodis:gcodis' | chpasswd ; passwd -e gcodis
+  if ! id gcodis 
+  then
+    useradd -m -s /bin/bash -d /home/gcodis gcodis 
+    echo -n 'gcodis:gcodis' | chpasswd
+    passwd -e gcodis
+  else
+    echo "The user 'gcodis' already exists. The user will not be created or configured."
+  fi
   # guifi.net guinux software repository
   # DONE: put as file
   # echo "Adding the file '/etc/apt/sources.list.d/guifi.net-stable.list' to the system sources.list for the guifi.net guinux repository."
@@ -36,6 +43,10 @@ do_first_installation () {
   apt-key adv --keyserver pgp.mit.edu --recv-keys 2E484DAB || apt-key adv --keyserver pgp.rediris.es --recv-keys 2E484DAB
   # It's recommended to update the package list
   #apt-get update
+  # Owncloud for Wheezy
+  echo "Adding keys for the owncloud Wheezy repository."
+  wget http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_7.0/Release.key
+  apt-key add - < Release.key  
 }
 
 case "$1" in
