@@ -89,25 +89,11 @@ As a result of the `make` build process the results are:
 Build 
 -----
 
-Packages and `live-build` system now are independent.
-
-### Packages
-
-Developing packages is independent of building images now.
-
-Packages are in the `./packages/` directory.
-
-To generate the packages do:
-
-  ./gen_pkgs.sh
-
-#### Dependencies
-
-  apt-get install devscripts dh-make
+Image generation based on the Debian tool `live-build`.
 
 ### Images and `live-build`
 
-To build the all the images using the `live-build` system you can do:
+To build all the images using the `live-build` system you can do:
 
   make
 
@@ -143,7 +129,8 @@ Automatically install a Debian, apply scripts and plug in to the Community Netwo
 Requirements
 ------------
 
-The project requires:
+Apart from the `live-build` requirements, if you use the `gcodis-create.sh` script the project requires:
+
 - Debian GNU/Linux (tested on unstable) or OpenWrt. Perhaps Ubuntu or Debian derivatives.
 - OpenWrt requires the trunk sources. For LXC and debootstrap.
 - Security: sources from Github need SSL and validate the Github certificate. TODO: http://wiki.openwrt.org/doc/howto/wget-ssl-certs . We use *--no-check-certificate* for wget, Github redirects to HTTPS.
@@ -160,21 +147,20 @@ Build Guifi-Community-Distro
 
 You need root permissions.
 
-You can work with two directories: *./gcodis.git*, with a clone of this git repository (optional) and */debootstrap-i386-wheezy-rootfs* (configurable) where the debootstrap is created, ready to be deployed to LXC or simply converted directly into the Guifi-Community-Distro.
+You can work with two directories: *./gcodis.git*, with a clone of this git repository (optional) 
+
+### Old way
+
+Clone the repository and use `gcodis-create.sh` script. You will generate the */debootstrap-i386-wheezy-rootfs* where the debootstrap is created, ready to be deployed to LXC or simply converted directly into the Guifi-Community-Distro.
 
 To build the Guifi-Community-Distro you can clone the repository, copy or fetch directly the script, cd into the cloned directory (if cloned) and run the command: **sudo sh gcodis-create.sh**
 
-Packages
---------
+### New way
 
-Now we're testing the build of packages in the *packages/* directory, you can use the command *./gen_pkgs.sh* to try the build of packages, based on the configuration found in the *conf/* directory, where there is a cloud name called by default *gcodisdefault* as a sub-directory name and inside there are example (the default) configuration files to generate client and server packages.
+Clone the repo, cd into it, install dependencies, run `make`.
 
-The distro aims to be configured using packages hooks for each provided service.
-
-The server rules the list of services and configurations, the client configures the choosen services with the server parameters.
-
-Sharing the build script
-------------------------
+Sharing the build script (outdated, we use `live-build`)
+--------------------------------------------------------
 
 You can share the script to easily build the Guifi-Community-Distro.
 
@@ -199,7 +185,13 @@ You can share the commands in the next section to automatically build the deboot
 Deploy debootstrap to a LXC container
 -------------------------------------
 
+### Old way
+
 After generating the debootstrap, and if run with the default no parameters, the script automates the process and convert (copies) it to LXC and run the LXC container. The created chroot with debootstrap is untouched and can be reused to deploy into other environments or into LXC again.
+
+### New way
+
+An LXC container is created and deployed to `/var/lib/lxc/<lxcname>` ready to be tested, cloned or packaged.
 
 From scratch
 ------------
@@ -232,9 +224,15 @@ Related to Tahoe you can do what you usually do with Tahoe and using it with Ava
 
 If you configure a Confine/Clommunity node for guifi.net, you have pre-configured the distro sources list for guinux to allow using the guifi.net web interface, to add the Confine/Clommunity node. If you don't configure the node in the web, you can configure guinux using *id=0*.
 
-The project is based on Avahi.
+The project is based on Avahi Zeroconf implementation.
+
+The project offers too some services:
+- Tor Bridge, which can be configured to serve as bridgee between a network and the Tor network.
+- Owncloud, useful to manage the Tahoe-LAFS Introducer GRID which the user is connected to.
 
 ### Local network environment
+
+A template is at Community-Lab testbed and it's called ''Guifi-Community-Distro v1.1'' and it's useful to get an idea of how the project works.
 
 This is the basic test environment.
 
@@ -264,6 +262,8 @@ This is a Work In Progress (WIP). That is another project needed for this one.
 
 To be used in a network with routers between multicast packets.
 
+We use the ddnsc [http://www.github.com/javi-jimenez/ddnsc.git] project.
+
 TODO
 ----
 
@@ -282,6 +282,12 @@ TODO
 
 Changelog
 ---------
+
+- 2013-11-29
+  - Build based on the Debian `live-build` tool.
+  - Packages and dependency graph are independent of the distro build.
+  - Checked on 2013-11-14 that the distro build: .img, .vdi, lxc, squashfs, .iso-hybrid.
+  - Depends on Wheezy and some package dependency to build the distro images.
 
 - 2013-10-16
   - */packages/* directory created.
