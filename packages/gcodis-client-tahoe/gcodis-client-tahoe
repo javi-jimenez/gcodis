@@ -86,6 +86,14 @@ add () {
   echo $name $url >> $introducer_list
   # Start as newly created
   auto_start $name
+  echo "Creating tahoe alias '$name' for '$resources_dir/$name/'"
+  tahoe create-alias -d $resources_dir/$name/ $name
+  echo "Getting your alias URI, not printed for security reasons"
+  uri="grep $name $resources_dir/$name/private/aliases | cut -f 2 -d ' '"
+  echo "Creating dir '$resources_dir/$name.dir/' to mount your new Tahoe resource"
+  mkdir $resources_dir/$name.dir/
+  echo "Mounting your Tahoe resource '$name' in '$resources_dir/$name.dir/'"
+  python gcodis-client-tahoe-pyfs $uri $resources_dir/$name.dir/
 }
 
 auto_start () {

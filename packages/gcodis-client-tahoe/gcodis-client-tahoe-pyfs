@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+# Source: https://tahoe-lafs.org/trac/tahoe-lafs/wiki/pyFilesystem
+
+# Modified by 2013, Javi Jimenez (guifi.net Foundation) for gcodis
+
+import sys
+
+import time
+from fs.contrib.tahoelafs import TahoeLAFS
+
+# Parameters
+#URI='URI:DIR2:ctmtx2awdo4xt77x5xxaz6nyxm:n5t546ddvd6xlv4v6se6sjympbdbvo7orwizuzl42urm73sxazqa'
+# mountPoint='f'             #Windows with dokan
+# mountPoint='/mnt/tahoe'    #Linux with FUSE
+URI=str(sys.argv[1])
+mountPoint=str(sys.argv[2])
+
+#print URI, mountPoint
+#sys.exit()
+
+try:
+        # Win
+        from fs.expose import dokan
+        fs = TahoeLAFS(URI)
+        mp = dokan.mount(fs, mountPoint)
+
+except:
+        # *UX
+        from fs.expose import fuse
+        fs = TahoeLAFS(URI)
+        mp = fuse.mount(fs, mountPoint, allow_other=True)

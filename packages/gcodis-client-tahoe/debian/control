@@ -10,7 +10,7 @@ Standards-Version: 3.9.4
 
 Package: gcodis-client-tahoe
 Architecture: all
-Depends: gcodis-base, tahoe-lafs
+Depends: gcodis-base, tahoe-lafs, python-pip
 Description: gcodis Tahoe-LAFS generic client
  This is the gcodis Tahoe-LAFS generic client, 
  can be a client or a client and storage at the same time.
