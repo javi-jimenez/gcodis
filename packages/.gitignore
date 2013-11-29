@@ -1,5 +1,0 @@
-*/debian/*.debhelper.log
-*/debian/*.debhelper
-*_*
-*/debian/files
-*/debian/*/

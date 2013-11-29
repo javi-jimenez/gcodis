@@ -1,6 +1,0 @@
-The Debian Package gcodis-tahoe-server-introducer
-=================================================
-
-Configures the Tahoe-LAFS introducer, placed in /home/gcodis/tahoe-introducer/ .
-
- -- Javi Jiménez (guifi.net Foundation) <javi.jimenez@guifi.net>  Thu, 17 Oct 2013 09:41:44 +0200
