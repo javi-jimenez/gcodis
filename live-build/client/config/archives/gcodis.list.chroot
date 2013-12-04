@@ -1,3 +1,1 @@
-deb http://repo.clommunity-project.eu/debian/gcodis/stable/ ./
-deb http://repo.clommunity-project.eu/debian/gcodis/testing/ ./
-deb http://repo.clommunity-project.eu/debian/gcodis/unstable/ ./
+deb http://repo.clommunity-project.eu/debian unstable/
