@@ -107,7 +107,11 @@ If you want to *clean* the compilation results to begin again the process you ca
 
 #### Dependencies
 
-  apt-get install live-build squashfs-tools virtualbox pwgen
+To build the system you need a clean Wheezy installation with around 100 GiB of free disk space.
+
+  apt-get install live-build squashfs-tools virtualbox pwgen git devscripts parted kpartx dh-make
+
+`dh-make` if for some reason you want to generate some package.
 
 Cloning LXC containers
 ----------------------
